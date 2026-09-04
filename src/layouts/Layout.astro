@@ -6,6 +6,9 @@ import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
 import config from "@/config";
 import "@/styles/global.css";
+// 走打包器而非 CDN：保证 CSS 版本与 rehype-katex 实际使用的 katex 一致，
+// 且字体 URL 由 Vite 自动加上 base 前缀（本站为 GitHub Pages 子路径部署）
+import "katex/dist/katex.min.css";
 
 type Props = {
   title?: string;

@@ -108,6 +108,13 @@
     pre {
       @apply focus-visible:outline-accent focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-dashed;
     }
+
+    /* KaTeX 公式跟随主题前景色。缺这条时列表外的独立公式会固定在
+       #374151，深色模式下几乎不可见（astro-paper issue #412）。 */
+    .katex-display,
+    .katex {
+      @apply text-foreground;
+    }
   }
 
   /* ===== Code Blocks & Syntax Highlighting ===== */
