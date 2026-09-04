@@ -119,7 +119,11 @@ $\Theta$ 即神经正切核（NTK）矩阵 [3]。式 (3.1) 说明残差按 $\The
 ## 参考文献
 
 [1] Maziar Raissi, Paris Perdikaris, George Em Karniadakis. Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. Journal of Computational Physics, 2019. DOI: 10.1016/j.jcp.2018.10.045.
+
 [2] Levi D. McClenny, Ulisses M. Braga-Neto. Self-adaptive physics-informed neural networks. Journal of Computational Physics, 2022. DOI: 10.1016/j.jcp.2022.111722. arXiv:2009.04544.
+
 [3] Sifan Wang, Xinling Yu, Paris Perdikaris. When and why PINNs fail to train: A neural tangent kernel perspective. Journal of Computational Physics, 2022. DOI: 10.1016/j.jcp.2021.110768. arXiv:2007.14527.
+
 [4] Matthew Tancik, Pratul P. Srinivasan, Ben Mildenhall 等. Fourier Features Let Networks Learn High Frequency Functions in Low Dimensional Domains. NeurIPS, 2020. arXiv:2006.10739.
+
 [5] Aditi S. Krishnapriyan, Amir Gholami, Shandian Zhe 等. Characterizing possible failure modes in physics-informed neural networks. NeurIPS, 2021. arXiv:2109.01050.

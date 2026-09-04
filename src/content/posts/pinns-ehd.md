@@ -205,22 +205,41 @@ EHD 对 PINNs 的要求可以浓缩为三件事：先算无量纲数表确定谁
 ## 参考文献
 
 [1] J. R. Melcher, G. I. Taylor. Electrohydrodynamics: A Review of the Role of Interfacial Shear Stresses. Annual Review of Fluid Mechanics, 1969. DOI: 10.1146/annurev.fl.01.010169.000551.
+
 [2] Christian Narváez-Muñoz 等. Computational ElectroHydroDynamics in microsystems: A Review of Challenges and Applications. Archives of Computational Methods in Engineering, 2024. DOI: 10.1007/s11831-024-10147-x.
+
 [3] Mohammad Towhidul Islam Rimon 等. A Design Study of an Elasto-Hydrodynamic Seal for sCO2 Power Cycle by Using Physics Informed Neural Network. ASME Power Applied R&D 2023. DOI: 10.1115/power2023-108802.（误匹配反面例子）
+
 [4] 林子彦, 李晓明. 基于物理信息神经网络的电液执行器建模方法. 液压与气动, 2026. DOI: 未获取（CNKI 收录）.（误匹配反面例子）
+
 [5] Muhammad Shoaib 等. Design of neural networks for Darcy–Forchheimer viscous fluid subjected to electro-magnetohydrodynamic and thermal impacts. Waves in Random and Complex Media, 2023. DOI: 10.1080/17455030.2023.2290656.（误匹配反面例子）
+
 [6] A. Castellanos, A. Ramos, A. González, N. G. Green, H. Morgan. Electrohydrodynamics and dielectrophoresis in microsystems: scaling laws. Journal of Physics D: Applied Physics, 2003. DOI: 10.1088/0022-3727/36/20/023.
+
 [7] Sílvio Cândido, José C. Páscoa. Data-driven surrogate modelling of multistage Taylor cone–jet dynamics. Physics of Fluids, 2024. DOI: 10.1063/5.0205454.
+
 [8] David Pankaczy, Conrard Giresse Tetsassi Feugmo. A Systematic Benchmark of Physics-Informed Neural Network Architectures for the Stiff Poisson-Nernst-Planck System: Adaptive Loss Weighting and Multi-Scale Resolution. arXiv, 2026. arXiv:2606.04125.
+
 [9] Ze Tao, Ke Xu, Fujun Liu. LSTM-PINN: An hybrid method for prediction of steady-state electrohydrodynamic flow. Journal of Computational Physics, 2026. arXiv:2512.21614.
+
 [10] Yuqing Zhou, Ze Tao, Fujun Liu. Residual Attention Physics-Informed Neural Networks for Robust Multiphysics Simulation of Steady-State Electrothermal Energy Systems. arXiv, 2026. arXiv:2603.23578.
+
 [11] Chao Lin, Ze Tao, Fujun Liu. A Unified Benchmark Study of Shock-Like Problems in Two-Dimensional Electrohydrodynamic Flow Based on LSTM-PINN. arXiv, 2026. arXiv:2603.21227.
+
 [12] Youngjae Park, Jaemin Kim, Junghwa Hong. Coupling-Robust Accuracy in Multiphysics Physics Informed Neural Networks via Kronecker-Preconditioned Optimization. arXiv, 2026. arXiv:2605.23391.
+
 [13] Runze Sun, Hyogu Jeong, Jiachen Zhao 等. A physics-informed neural network framework for multi-physics coupling microfluidic problems. Computers & Fluids, 2024. DOI: 10.1016/j.compfluid.2024.106421.
+
 [14] Baitong Zhou, Ze Tao, Ke Xu 等. High-Fidelity Reconstruction of Charge Boundary Layers and Sharp Interfaces in Electro-Thermal-Convective Flows via Residual-Attention PINNs. arXiv, 2026. arXiv:2604.20881.
+
 [15] Yanhong Peng, Yuxin Wang, Fangchao Hu 等. Predictive modeling of flexible EHD pumps using Kolmogorov–Arnold Networks. Biomimetic Intelligence and Robotics, 2024. arXiv:2405.07488.
+
 [16] Najeeb Alam Khan 等. ISRN Computational Mathematics, 2012. DOI: 10.5402/2012/341069. 与 S.E. Ghasemi 等. Journal of Electrostatics, 2014. DOI: 10.1016/j.elstat.2013.11.005.（圆管基准解法谱系）
+
 [17] Xujia Huang, Fajie Wang, Benrong Zhang, Hanqing Liu. Enriched Physics-informed Neural Networks for Dynamic Poisson-Nernst-Planck Systems. arXiv, 2024. arXiv:2402.01768.
+
 [18] Mara Martinez, B. Veena S. N. Rao, S. M. Mallikarjunaiah. Numerical approximation of electrohydrodynamics model: a comparative study of PINNs and FEM. Physica Scripta, 2026. arXiv:2510.14310.
+
 [19] Fumihiro Imoto. Computing high-order mixed derivatives in physics-informed neural networks using multi-index Bell polynomials. arXiv, 2026. arXiv:2609.03768.
+
 [20] Shengze Cai, Zhicheng Wang, Lu Lu, Tamer A. Zaki, George Em Karniadakis. DeepM&Mnet: Inferring the electroconvection multiphysics fields based on operator approximation by neural networks. Journal of Computational Physics, 2021. DOI: 10.1016/j.jcp.2021.110296.（算子学习路线，非残差 PINN）

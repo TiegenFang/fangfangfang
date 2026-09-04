@@ -454,7 +454,7 @@ draft: false
 
 **必须覆盖**
 
-1. **库对比表**：DeepXDE、NVIDIA Modulus、NeuroDiffEq、IDRLnet、SciANN、PINNacle（基准套件）。对比维度：后端、API 抽象层次、是否支持域分解/变体、是否支持批训练与多 GPU、文档与社区活跃度、许可证、适合的问题规模。
+1. **库对比表**：DeepXDE、NVIDIA PhysicsNeMo（曾名 Modulus / SimNet）、NeuroDiffEq、IDRLnet、SciANN、PINNacle（基准套件）。对比维度：后端、API 抽象层次、是否支持域分解/变体、是否支持批训练与多 GPU、文档与社区活跃度、许可证、适合的问题规模。
 2. **采样策略**：均匀 / LHS / 边界加密 / RAR / RAR-D / 残差自适应。给出各自适用场景与配点数量级建议。
 3. **优化实践**：Adam → L-BFGS 两段式、学习率调度（cosine / exponential decay / ReduceLROnPlateau）、批大小与全批的取舍、迭代数量级。
 4. **验证与误差度量**：相对 $L_2$ 误差、$L_\infty$、残差场的空间分布可视化（**残差均匀小才算收敛，局部尖峰说明欠拟合**）、与解析解或高保真 CFD 的逐点对比、跨随机种子的均值与方差（必须报告，单次运行结果无意义）。
@@ -482,7 +482,7 @@ draft: false
 | **1** | 课程页 + 第 6 讲（燃烧） | 批次 0 | **已完成**：`courses/pinns.md` + `posts/pinns-combustion.md`，18 条引用全部来自已审计 JSON 的真 DOI/arXiv |
 | **2** | 第 1–5 讲（方法学主干） | 批次 0 | **已完成**：5 讲全部写出；引用经 arXiv API / Crossref 逐条核验；XPINN 原始论文 DOI 已由 A 路重检索补得并回查（`10.4208/cicp.oa-2020-0164`），**待核验项清零** |
 | **3** | 第 7 讲（EHD） | 批次 0 + C 路检索 | **已完成**：按 track-C 实测（34 条有效命中，不降级）写成综述+推导混合式；应用面按可得性重排、介电泳降级为非 ML 标度律引证、推导案例改为稳态单极 EHD 流、DeepM&Mnet 标注为算子学习、单团队集中度已声明 |
-| **4** | 第 8 讲（工程实践） | 批次 0 | **已完成**：6 条库/基准引用经 arXiv API 核验（Modulus 以其前身 SimNet arXiv:2012.07938 为出处并注明） |
+| **4** | 第 8 讲（工程实践） | 批次 0 | **已完成**：6 条库/基准引用经 arXiv API 核验；NVIDIA 框架按现名 PhysicsNeMo 列出，并以该研究线早期 SimNet 论文（arXiv:2012.07938）为方法源头出处、注明 SimNet → Modulus → PhysicsNeMo 谱系 |
 
 **为什么先发第 6 讲**：材料现成（25 条文献、2 篇综述、12 条真 DOI），可以最快跑通「数学渲染 → 写作规范 → 引用格式 → build 验证」的完整链路，暴露问题后再批量写方法学五讲。教学顺序仍是 1→8，`order` 字段按教学顺序固定，发布顺序由 `pubDatetime` 控制。
 

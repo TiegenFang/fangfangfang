@@ -14,14 +14,16 @@ description: 库对比、采样策略、优化流程、误差度量与复现清�
 
 ## 库对比
 
-| 库                 | 后端                       | API 抽象层次              | 域分解/变体支持        | 批训练与多 GPU     | 文档与社区           | 许可证              | 适合规模   |
-| ------------------ | -------------------------- | ------------------------- | ---------------------- | ------------------ | -------------------- | ------------------- | ---------- |
-| DeepXDE [1]        | TensorFlow / PyTorch / JAX | 高：声明几何 + PDE + 边界 | 有：多域与部分变体内置 | 依赖后端           | 最全，示例多         | Apache-2.0          | 中小       |
-| NVIDIA Modulus [2] | PyTorch                    | 中：图式配置              | 有：图式多物理场组合   | **强：多节点扩展** | 官方文档全，社区中   | Apache-2.0          | **大**     |
-| NeuroDiffEq [3]    | PyTorch                    | 高：函数式声明            | 弱                     | 单卡               | 简，上手快           | 以仓库 LICENSE 为准 | 小（原型） |
-| IDRLnet [4]        | PyTorch                    | 中                        | 有：反问题接口         | 单卡               | 中文文档友好         | 以仓库 LICENSE 为准 | 中小       |
-| SciANN [5]         | Keras / TensorFlow         | 中：函数式                | 弱                     | 单卡               | 中                   | 以仓库 LICENSE 为准 | 中小       |
-| PINNacle [6]       | PyTorch                    | 基准套件而非求解器        | 评测多种配置           | —                  | 含统一误差度量与协议 | 以仓库 LICENSE 为准 | 评估用     |
+| 库                     | 后端                       | API 抽象层次              | 域分解/变体支持        | 批训练与多 GPU     | 文档与社区           | 许可证              | 适合规模   |
+| ---------------------- | -------------------------- | ------------------------- | ---------------------- | ------------------ | -------------------- | ------------------- | ---------- |
+| DeepXDE [1]            | TensorFlow / PyTorch / JAX | 高：声明几何 + PDE + 边界 | 有：多域与部分变体内置 | 依赖后端           | 最全，示例多         | Apache-2.0          | 中小       |
+| NVIDIA PhysicsNeMo [2] | PyTorch                    | 中：图式配置              | 有：图式多物理场组合   | **强：多节点扩展** | 官方文档全，社区中   | Apache-2.0          | **大**     |
+| NeuroDiffEq [3]        | PyTorch                    | 高：函数式声明            | 弱                     | 单卡               | 简，上手快           | 以仓库 LICENSE 为准 | 小（原型） |
+| IDRLnet [4]            | PyTorch                    | 中                        | 有：反问题接口         | 单卡               | 中文文档友好         | 以仓库 LICENSE 为准 | 中小       |
+| SciANN [5]             | Keras / TensorFlow         | 中：函数式                | 弱                     | 单卡               | 中                   | 以仓库 LICENSE 为准 | 中小       |
+| PINNacle [6]           | PyTorch                    | 基准套件而非求解器        | 评测多种配置           | —                  | 含统一误差度量与协议 | 以仓库 LICENSE 为准 | 评估用     |
+
+**命名说明**：NVIDIA 这个框架先后叫 SimNet、Modulus，现名 **PhysicsNeMo**（PyPI 包 `nvidia-physicsnemo`）。文献 [2] 是该研究线的早期论文，只能代表方法源头；表中的能力描述与接口以现名官方文档为准。检索文献时三个名字都要试，只搜现名会漏掉 2020–2023 年的工作。
 
 两点提醒。第一，PINNacle 不是求解器，是**基准**：当你怀疑「是我的实现问题还是方法上限」时，用它跑同一问题做对照最省事。第二，许可证列只填了有公开把握的两项，其余以各仓库 LICENSE 为准——它很少成为决定因素，但商用项目必须逐核。
 
@@ -121,8 +123,13 @@ description: 库对比、采样策略、优化流程、误差度量与复现清�
 ## 参考文献
 
 [1] Lu Lu, Xuhui Meng, Zhiping Mao, George Em Karniadakis. DeepXDE: A deep learning library for solving differential equations. arXiv, 2019. arXiv:1907.04502.
-[2] Oliver Hennigh, Sridhar Narasimhan, Mohammad Amin Nabian 等. NVIDIA SimNet: an AI-accelerated multi-physics simulation framework. arXiv, 2020. arXiv:2012.07938.（Modulus 为其开源后继，接口以官方文档为准）
+
+[2] Oliver Hennigh, Sridhar Narasimhan, Mohammad Amin Nabian 等. NVIDIA SimNet: an AI-accelerated multi-physics simulation framework. arXiv, 2020. arXiv:2012.07938.（该框架先后名 SimNet、Modulus，现名 NVIDIA PhysicsNeMo；表中条目指现名，接口以官方文档为准）
+
 [3] Shuheng Liu, Pavlos Protopapas, David Sondak, Feiyu Chen 等. Recent Advances of NeuroDiffEq — An Open-Source Library for Physics-Informed Neural Networks. arXiv, 2025. arXiv:2502.12177.
+
 [4] Peng Chen, Yixuan Liu, et al. IDRLnet: A Physics-Informed Neural Network Library. arXiv, 2021. arXiv:2107.04320.
+
 [5] Ehsan Haghighat, Ruben Juanes. SciANN: A Keras/Tensorflow wrapper for scientific computations and physics-informed deep learning using artificial neural networks. arXiv, 2020. arXiv:2005.08803.
+
 [6] Zhongping Hao, Jianfeng Yao, Chengyang Ying 等. PINNacle: A Comprehensive Benchmark of Physics-Informed Neural Networks for Solving PDEs. arXiv, 2023. arXiv:2306.08827.

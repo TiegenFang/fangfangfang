@@ -89,19 +89,30 @@ PINNs 的变体多到容易迷失。这一讲不按发表顺序罗列，而是�
 
 ## 关于标识符的说明
 
-本讲全部参考文献均经 arXiv API 或 Crossref 回查；XPINN 原始方法论文最初未检索到标识符，后由 A 路重检索补得 DOI 并回查确认（见 [1]）。有两类内容**故意不附出处**：时间域分解与多保真度作为方法描述给出（前者的动机是第 3 讲病态五的因果性违背，后者的概念见第 1 讲算子路线讨论），因为它们在本讲是手法而非文献论断。经检索确认暂无可核验标识符、因而未引用的条目：dPINN 原始论文、RAR 原始论文、Modulus 的独立论文（第 8 讲以其前身 SimNet 为出处并注明）。不编造标识符。
+本讲全部参考文献均经 arXiv API 或 Crossref 回查；XPINN 原始方法论文最初未检索到标识符，后由 A 路重检索补得 DOI 并回查确认（见 [1]）。有两类内容**故意不附出处**：时间域分解与多保真度作为方法描述给出（前者的动机是第 3 讲病态五的因果性违背，后者的概念见第 1 讲算子路线讨论），因为它们在本讲是手法而非文献论断。经检索确认暂无可核验标识符、因而未引用的条目：dPINN 原始论文、RAR 原始论文、PhysicsNeMo（曾名 Modulus）的独立论文（第 8 讲以该研究线早期 SimNet 论文为出处，并注明 SimNet → Modulus → PhysicsNeMo 的命名谱系）。不编造标识符。
 
 ## 参考文献
 
 [1] Ameya D. Jagtap, George Em Karniadakis. Extended Physics-Informed Neural Networks (XPINNs): A Generalized Space-Time Domain Decomposition Based Deep Learning Framework. Communications in Computational Physics, 2020. DOI: 10.4208/cicp.oa-2020-0164. 泛化行为分析见 When Do Extended Physics-Informed Neural Networks (XPINNs) Improve Generalization? arXiv, 2021. arXiv:2109.09444.
+
 [2] Ameya D. Jagtap, Ehsan Kharazmi, George Em Karniadakis. Conservative physics-informed neural networks on discrete domains for conservation laws. Computer Methods in Applied Mechanics and Engineering, 2020. DOI: 10.1016/j.cma.2020.113028.
+
 [3] Weinan E, Bin Yu. The Deep Ritz method: A deep learning-based numerical algorithm for solving variational problems. Communications in Mathematics and Statistics, 2018. DOI: 10.1007/s40304-018-0127-z. arXiv:1710.00211.
+
 [4] Ehsan Kharazmi, Zhongqiang Zhang, George Em Karniadakis. Variational Physics-Informed Neural Networks For Solving Partial Differential Equations. arXiv, 2019. arXiv:1912.00873.
+
 [5] Tim De Ryck, Siddhartha Mishra, Roberto Molinaro. wPINNs: Weak Physics informed neural networks for approximating entropy solutions of hyperbolic conservation laws. arXiv, 2022. arXiv:2207.08483.
+
 [6] Guofei Pang, Lu Lu, George Em Karniadakis. fPINNs: Fractional Physics-Informed Neural Networks. arXiv, 2018. arXiv:1811.08967.
+
 [7] Lu Lu, Pengzhan Jin, George Em Karniadakis. DeepONet: Learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators. arXiv, 2019. arXiv:1910.03193.
+
 [8] Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli 等. Fourier Neural Operator for Parametric Partial Differential Equations. arXiv, 2020. arXiv:2010.08895.
+
 [9] Sifan Wang, Hanwen Wang, Paris Perdikaris. Learning the solution operator of parametric partial differential equations with physics-informed DeepONets. Science Advances, 2021. DOI: 10.1126/sciadv.abi8605.
+
 [10] Juan Diego Toscano, Vivek Oommen, Alan John Varghese 等. From PINNs to PIKANs: Recent Advances in Physics-Informed Machine Learning. arXiv, 2024. arXiv:2410.13228.
+
 [11] Liu Yang, Xuhui Meng, George Em Karniadakis. B-PINNs: Bayesian Physics-Informed Neural Networks for Forward and Inverse PDE Problems with Noisy Data. arXiv, 2020. arXiv:2003.06097.
+
 [12] 多保真度 PINNs 的概念与框架见 George Em Karniadakis 等. Physics-informed machine learning. Nature Reviews Physics, 2021. DOI: 10.1038/s42254-021-00314-5.

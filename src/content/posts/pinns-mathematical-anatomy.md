@@ -156,5 +156,7 @@ $$
 ## 参考文献
 
 [1] Maziar Raissi, Paris Perdikaris, George Em Karniadakis. Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. Journal of Computational Physics, 2019. DOI: 10.1016/j.jcp.2018.10.045.
+
 [2] Rüdiger Brecht, Dmytro Popovych, Alex Bihlo, Roman O. Popovych. Improving physics-informed DeepONets with hard constraints. arXiv, 2023. arXiv:2309.07899.
+
 [3] George Em Karniadakis, Ioannis G. Kevrekidis, Lu Lu 等. Physics-informed machine learning. Nature Reviews Physics, 2021. DOI: 10.1038/s42254-021-00314-5.

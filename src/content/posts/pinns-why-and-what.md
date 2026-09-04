@@ -133,7 +133,11 @@ PINNs 是用神经网络作试函数、用自动微分把 PDE 残差变成损失
 ## 参考文献
 
 [1] Maziar Raissi, Paris Perdikaris, George Em Karniadakis. Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. Journal of Computational Physics, 2019. DOI: 10.1016/j.jcp.2018.10.045.
+
 [2] George Em Karniadakis, Ioannis G. Kevrekidis, Lu Lu 等. Physics-informed machine learning. Nature Reviews Physics, 2021. DOI: 10.1038/s42254-021-00314-5.
+
 [3] Lu Lu, Pengzhan Jin, George Em Karniadakis. DeepONet: Learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators. arXiv, 2019. arXiv:1910.03193.
+
 [4] Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli 等. Fourier Neural Operator for Parametric Partial Differential Equations. arXiv, 2020. arXiv:2010.08895.
+
 [5] Juan Diego Toscano, Vivek Oommen, Alan John Varghese 等. From PINNs to PIKANs: Recent Advances in Physics-Informed Machine Learning. arXiv, 2024. arXiv:2410.13228.

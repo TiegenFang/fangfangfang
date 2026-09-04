@@ -256,23 +256,43 @@ $Da_k$ 跨量级意味着各 $\mathcal{L}_k$ 的天然幅值跨量级。两种�
 ## 参考文献
 
 [1] Jiahao Wu, Xutun Wang, Yuxin Wu 等. Physics-informed machine learning for combustion: A review. arXiv, 2025. arXiv:2509.03347.
+
 [2] Amirali Shateri, Zhiyin Yang, Yuying Yan 等. AI-Powered Surrogate Modelling for Multiscale Combustion: A Critical Review and Opportunities. arXiv, 2026. arXiv:2604.25617.
+
 [3] Shihong Zhang, Chi Zhang, Bosen Wang. CRK-PINN: A physics-informed neural network for solving combustion reaction kinetics ordinary differential equations. Combustion and Flame, 2024. DOI: 10.1016/j.combustflame.2024.113647.
+
 [4] Ahmed Almeldein, Noah Van Dam. Accelerating Chemical Kinetics Calculations With Physics Informed Neural Networks. Journal of Engineering for Gas Turbines and Power, 2023. DOI: 10.1115/1.4062654.
+
 [5] Anuj Kumar, Tarek Echekki. Combustion chemistry acceleration with DeepONets. Fuel, 2024. DOI: 10.1016/j.fuel.2024.131212.
+
 [6] Chung K. Law. Combustion Physics. Cambridge University Press, 2006.
+
 [7] Thierry Poinsot, Denis Veynante. Theoretical and Numerical Combustion. R. T. Edwards, 2nd ed., 2005.
+
 [8] Norbert Peters. Turbulent Combustion. Cambridge University Press, 2000.
+
 [9] Arsalan Taassob, Rishikesh Ranade, Tarek Echekki. Physics-Informed Neural Networks for Turbulent Combustion: Toward Extracting More Statistics and Closure from Point Multiscalar Measurements. Energy & Fuels, 2023. DOI: 10.1021/acs.energyfuels.3c02410.
+
 [10] 安健, 陈宇轩, 苏星宇 等. 机器学习在湍流燃烧及发动机中的应用与展望. 清华大学学报(自然科学版), 2023. DOI: 10.16511/j.cnki.qhdxxb.2023.25.001.
+
 [11] Shiyu Liu, Haiou Wang, Jacqueline H. Chen 等. High-resolution reconstruction of turbulent flames from sparse data with physics-informed neural networks. Combustion and Flame, 2024. DOI: 10.1016/j.combustflame.2023.113275.
+
 [12] Wang Xutun, Wen Haocheng, Hu Tong 等. Flow-field reconstruction in rotating detonation combustor based on physics-informed neural network. Physics of Fluids, 2023. DOI: 10.1063/5.0154979.
+
 [13] Shihong Zhang, Chi Zhang, Bosen Wang. A physics-informed neural network for aiding the acquisition of high-fidelity multiphysics fields in gas-phase combustion reacting flows without pre-training. Physics of Fluids, 2025. DOI: 10.1063/5.0284930.
+
 [14] Kai Liu, Kun Luo, Yuzhou Cheng 等. Surrogate modeling of parameterized multi-dimensional premixed combustion with physics-informed neural networks for rapid exploration of design space. Combustion and Flame, 2023. DOI: 10.1016/j.combustflame.2023.113094.
+
 [15] Zhen Cao, Kai Liu, Kun Luo 等. Surrogate modeling of multi-dimensional premixed and non-premixed combustion using pseudo-time stepping physics-informed neural networks. Physics of Fluids, 2024. DOI: 10.1063/5.0235674.
+
 [16] Mengze Song, Xinzhou Tang, Jiangkuan Xing 等. Physics-informed neural networks coupled with flamelet/progress variable model for solving combustion physics considering detailed reaction mechanism. Physics of Fluids, 2024. DOI: 10.1063/5.0227581.
+
 [17] Cheng Chi, Srijith Sreekumar, Dominique Thévenin. Data-driven discovery of heat release rate markers for premixed NH3/H2/air flames using physics-informed machine learning. Fuel, 2022. DOI: 10.1016/j.fuel.2022.125508.
+
 [18] Qianlong Wang, Mingxue Gong, Alexis Matynia 等. Soot temperature and volume fraction field predictions via line-of-sight soot integral radiation equation informed neural networks in laminar sooting flames. Physics of Fluids, 2024. DOI: 10.1063/5.0245120.
+
 [19] Sathesh Mariappan, Kamaljyoti Nath, George Em Karniadakis. Learning thermoacoustic interactions in combustors using a physics-informed neural network. Engineering Applications of Artificial Intelligence, 2023. arXiv:2401.00061.
+
 [20] Mohamad Mahdi Mozafari Parsa, Amir Mahdi Tahsini. Predicting the transient burning of non-charring materials using physics-informed neural networks. Fire Safety Journal, 2025. DOI: 10.1016/j.firesaf.2025.104379.
+
 [21] Cihat Emre Üstün, Rodolfo Da Silva Machado De Freitas, Ekenechukwu Chijioke Okafor 等. Machine Learning Applications for Predicting Fuel Ignition and Flame Properties: Current Status and Future Perspectives. Energy & Fuels, 2025. DOI: 10.1021/acs.energyfuels.5c02343.

@@ -107,5 +107,7 @@ PINNs 的价值集中在「传统求解器接不住数据」的地方：反问�
 ## 参考文献
 
 [1] George Em Karniadakis, Ioannis G. Kevrekidis, Lu Lu 等. Physics-informed machine learning. Nature Reviews Physics, 2021. DOI: 10.1038/s42254-021-00314-5.
+
 [2] Juan Diego Toscano, Vivek Oommen, Alan John Varghese 等. From PINNs to PIKANs: Recent Advances in Physics-Informed Machine Learning. arXiv, 2024. arXiv:2410.13228.
+
 [3] Zhongping Hao, Jianfeng Yao, Chengyang Ying 等. PINNacle: A Comprehensive Benchmark of Physics-Informed Neural Networks for Solving PDEs. arXiv, 2023. arXiv:2306.08827.
