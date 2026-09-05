@@ -2,7 +2,7 @@
 author: Tiegen Fang
 pubDatetime: 2026-09-05T03:00:00Z
 title: 第 3 讲：MD 骨架——系综、长程静电与输运量
-description: velocity-Verlet 的时间步上限怎么定、NVT 与 NPT 恒温恒压器的选择如何污染输运量、Ewald 求和的三项与 tin-foil 边界条件为什么必须显式声明，以及 Nernst–Einstein 电导率为什么会把离子液体高估三到六成。附电荷缩放 ±0.8e 惯例的适用边界与它在强电场下必然失效的原因。
+description: 时间步上限怎么定、恒温恒压器如何污染输运量、Ewald 三项与 tin-foil 边界条件为什么必须显式声明，以及 Nernst–Einstein 电导率为什么会把离子液体高估四成到一倍。另附 ±0.8e 缩放在强电场下必然失效的原因。
 course: md-dft-ionic-liquid
 order: 3
 tags:
@@ -240,7 +240,7 @@ $$
 2. Nosé–Hoover 守恒动量、可用于输运量；**Langevin 逐项注入随机动量，会同时污染 $\eta$ 与 $\sigma$**，只能用于探路。各向异性体系要 Parrinello–Rahman，并且要盯 $P_{\alpha\beta}$ 非对角分量。
 3. 结构弛豫 $\tau_\alpha\sim d^2/6D\approx8\ \mathrm{ns}$（$D\sim5\times10^{-12}\ \mathrm{m^2/s}$、$d=0.5\ \mathrm{nm}$），**1 ns 的 IL 轨迹未平衡**。判据：$t_{\text{prod}}\gtrsim10\tau_\alpha$（即 $\gtrsim80\ \mathrm{ns}$），且加倍时长后各量移动 $<5\%$。
 4. Ewald 三项（式 3.9）缺一不可；$\mathbf k=0$ 的剔除等价于选定 tin-foil 边界，换真空边界要补式 (3.10) 的表面项——**两者是不同的物理体系**。截断静电的误差是总能量的四成量级，smooth switching 修不掉。
-5. $\sigma_{\text{NE}}$（式 3.14）丢掉全部离子交叉项；$\sigma=\sigma_{\text{NE}}(1+D^{\mathrm d}/D^{\mathrm s})$（式 3.15）。若比例为 $p$ 的离子与反离子锁成中性对同步移动，则 $\sigma/\sigma_{\text{NE}}=1-p$。IL 中高估 $30\%$–$60\%$ 对应 $D^{\mathrm d}/D^{\mathrm s}\approx-0.23$–$-0.38$。第 6 讲的电流标度律依赖这个数。
+5. $\sigma_{\text{NE}}$（式 3.14）丢掉全部离子交叉项；$\sigma=\sigma_{\text{NE}}(1+D^{\mathrm d}/D^{\mathrm s})$（式 3.15）。若比例为 $p$ 的离子与反离子锁成中性对同步移动，则 $\sigma/\sigma_{\text{NE}}=1-p$。IL 常见区间高估四成到一倍（$1-p\approx0.5$–$0.7$），对应 $D^{\mathrm d}/D^{\mathrm s}\approx-0.29$–$-0.5$。第 6 讲的电流标度律依赖这个数。
 6. $\lambda=0.8$ 缩放是零场补丁：$\lambda^2$ 与 $\lambda$ 的不同标度让临界场平移 $20\%$；而在 $\xi_L=\mu E/k_{\mathrm B}T\gtrsim1$（$E\gtrsim250\ \mathrm{kV/mm}$）的场下屏蔽的载体本身被冻结，**补丁必然失效**。
 
 第 4 讲把本讲反复回指的"力场"两个字打开：固定电荷的参数化惯例、极化三条路线的代价、粗粒化买到的时间尺度、force matching 这条通往第 5 讲的谱系，以及 ReaxFF 怎样让键断裂。

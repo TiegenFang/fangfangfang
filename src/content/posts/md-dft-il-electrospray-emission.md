@@ -252,4 +252,6 @@ $I_\alpha$ 为物种 $\alpha$ 携带的电流（$\mathrm{A}$）、$\dot m_\alpha
 [11] Weijie Zheng, Xuhui Liu, Jinrui Zhang, Yufeng Cheng 等. Molecular dynamics simulation of ionic liquid electrospray: Microscopic presentation of the effects of mixed ionic liquids. International Journal of Heat and Mass Transfer, 2022. DOI: 10.1016/j.ijheatmasstransfer.2021.121983.
 
 > [!NOTE]
-> **文献集中度与缺口声明。** 本讲 [8][9] 与第 7 讲的 MD–Poisson 耦合工作同出 Borner–Li–Levin / Borner–Levin 一条线，应读作一个团队的技术路线而非学界共识；[10][11] 亦为同一团队的系列工作。此外式 (6.1)、(6.4) 的原始出处（[2][5]）与 [3][4] 的题名和 DOI 尚未逐条经 Crossref 回查，按本博客的硬规矩一律标「待补」而不猜编号。所幸这几条只用到量级与幂次，不依赖具体系数，本讲的桥接结论不受影响。
+> **文献集中度声明。** 本讲 [8][9] 与第 7 讲的 MD–Poisson 耦合工作同出 Borner–Li–Levin / Borner–Levin 一条线，应读作一个团队的技术路线而非学界共识；[10][11] 亦为同一团队（作者串高度重叠）的系列工作。
+>
+> **核验状态。** 本节 11 条已逐条经 Crossref 单条回查，题名、作者与年份逐项对上，包括三条经典结果：[2] Taylor 1964（`10.1098/rspa.1964.0151`）、[3] Gañán-Calvo、Dávila 与 Barrero 1997（`10.1016/S0021-8502(96)00433-8`，Elsevier 风格 DOI 里的 `(96)` 属于注册串本身）、[5] Rayleigh 1882（`10.1080/14786448208628425`）。需要注意的是**用法**而非**真伪**：本讲对这几条经典结果只取量级与幂次，不依赖其闭式系数，因此桥接结论不受这些系数不确定性的影响。

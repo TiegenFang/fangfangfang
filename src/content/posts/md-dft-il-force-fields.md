@@ -180,7 +180,7 @@ _HAN 基推进剂的热分解产物分布。_ 选 ReaxFF。已知失效模式是
 
 [5] Kateryna Goloviznina, Zheng Gong, Margarida F. Costa Gomes, Agílio A. H. Pádua. Extension of the CL&Pol Polarizable Force Field to Electrolytes, Protic Ionic Liquids, and Deep Eutectic Solvents. Journal of Chemical Theory and Computation, 2021, 17: 1606–1617. DOI: 10.1021/acs.jctc.0c01002.
 
-[6] Pengyu Ren, Jay W. Ponder. Polarizable Atomic Multipole Water Model for Molecular Mechanics Simulation. The Journal of Physical Chemistry B, 2003, 107: 5933–5947. DOI: 10.1021/jp0278152.（Crossref 元数据里该 DOI 末尾带一个 `+` 属注册残留，写引用用规范串）
+[6] Pengyu Ren, Jay W. Ponder. Polarizable Atomic Multipole Water Model for Molecular Mechanics Simulation. The Journal of Physical Chemistry B, 2003, 107: 5933–5947. DOI: 10.1021/jp027815+.
 
 [7] Erik Antonio Vázquez-Montelongo, José Enrique Vázquez-Cervantes, G. Andrés Cisneros. Current Status of AMOEBA–IL: A Multipolar/Polarizable Force Field for Ionic Liquids. International Journal of Molecular Sciences, 2020. DOI: 10.3390/ijms21030697.
 
