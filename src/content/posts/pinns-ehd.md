@@ -61,6 +61,8 @@ $$
 
 方程类型：Poisson 是**椭圆**（全场瞬时耦合），电荷守恒是**双曲-抛物混合**（迁移项双曲、扩散项抛物），NS 是**抛物**。三者收敛特性不同，这是后面训练竞争的结构根源。两相或界面问题还需 leaky-dielectric 模型与界面 Maxwell 应力 [6][7]。
 
+同一套方程组在电喷雾微推进里还有两条**非 PINNs** 的数值路线，值得与本讲的连续介质求解对照：一条是把显式离子与三维 Poisson 网格求解器耦合，电荷密度由分子动力学统计得到、电场由泊松解回喂给粒子 [21]；另一条是用电水动力学–粒子网格（PIC）方法直接模拟锥尖的场蒸发 [22]。两者的原子尺度细节（力场选择、离子发射事件、发射器表面吸附）见姊妹课程[《分子动力学与第一性原理：离子液体工质的电喷雾与绿色推进》第 7 讲](https://tiegenfang.github.io/fangfangfang/posts/md-dft-il-electrospray-surface-coupling/)。那门课处理的是连续介质假设在纳米锥尖失效的部分——本讲的 $\varepsilon$ 取体相常数这一前提，在那里是要被质疑的对象。
+
 ## 无量纲数：由尺度推导
 
 取特征尺度 $d$（电极间距）、$\varphi_0$（施加电压）、$\rho_0$（注入电荷密度），并以**迁移速度**为速度尺度 $u_0 = b\varphi_0/d$，压力尺度 $p_0 = \rho_m u_0^2$，时间尺度 $t_0 = d/u_0$。代入后三个方程变为：
@@ -243,3 +245,7 @@ EHD 对 PINNs 的要求可以浓缩为三件事：先算无量纲数表确定谁
 [19] Fumihiro Imoto. Computing high-order mixed derivatives in physics-informed neural networks using multi-index Bell polynomials. arXiv, 2026. arXiv:2609.03768.
 
 [20] Shengze Cai, Zhicheng Wang, Lu Lu, Tamer A. Zaki, George Em Karniadakis. DeepM&Mnet: Inferring the electroconvection multiphysics fields based on operator approximation by neural networks. Journal of Computational Physics, 2021. DOI: 10.1016/j.jcp.2021.110296.（算子学习路线，非残差 PINN）
+
+[21] Arnaud Borner, Deborah A. Levin. Coupled Molecular Dynamics—3-D Poisson Simulations of Ionic Liquid Electrospray Thrusters. IEEE Transactions on Plasma Science, 2015. DOI: 10.1109/tps.2014.2327913.（MD–Poisson 耦合路线，非 PINNs；DOI 前缀含 2014 为投稿年，Crossref 出版年为 2015）
+
+[22] Yipeng Fan, Guangqing Xia, Chong Chen, Bohan Xia 等. Field Evaporation Simulation in Electrospray Thrusters Using Electrohydrodynamics–Particle-in-Cell Method. AIAA Journal, 2025. DOI: 10.2514/1.j064951.（EHD–PIC 场蒸发路线，非 PINNs；单条低引工作，不代表学界共识）
