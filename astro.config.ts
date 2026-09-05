@@ -13,6 +13,10 @@ import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
 import rehypeCallouts from "rehype-callouts";
 import rehypeKatex from "rehype-katex";
+// KaTeX 的 \ce 化学方程式宏属 mhchem 扩展，默认不注册；构建期注册一次即可。
+// 必须用 ESM 入口：本仓库是 type: module，CJS 入口可能解析到另一份 katex 实例，
+// 导致宏注册失效。站点是 SSG，公式在构建期渲染成静态 HTML，浏览器端无需加载。
+import "katex/dist/contrib/mhchem.mjs";
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
