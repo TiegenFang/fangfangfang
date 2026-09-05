@@ -291,7 +291,7 @@ $k=\dfrac{k_{\mathrm B}T}{h}\dfrac{Q^{\ddagger}}{Q_{\mathrm R}}\exp\!\left(-\dfr
 - `10.1021/jp044414g`（2005 *J. Phys. Chem. B*，275 引）Ab Initio Molecular Dynamics Simulation of a Room Temperature Ionic Liquid —— AIMD on IL 的奠基工作
 - `10.1021/jp068898n`（2007 *J. Phys. Chem. B*，156 引）Insights into the Structure and Dynamics of a Room-Temperature Ionic Liquid: AIMD
 - `10.1063/1.1593011`（2003 *J. Chem. Phys.*，30 引）Hydrogen bonding and proton transfer in small hydroxylammonium nitrate clusters: A theoretical study —— HAN 团簇的 DFT 基准，为第 8 讲铺垫
-- 需补：PBE 原始文献、Grimme DFT-D3 原始文献、vdW-DF 原始文献、counterpoise/BSSE 原始出处（均为教科书级奠基文献，须补 DOI）
+- 已补齐（见 §7 奠基文献小节）：PBE `10.1103/PhysRevLett.77.3865`；DFT-D3 `10.1063/1.3382344`（题名是 94 elements H–Pu）、D4 主文 `10.1063/1.5090222`；vdW-DF 原文 `10.1103/PhysRevLett.92.246401`、固体检验 `10.1103/PhysRevB.83.195131`；counterpoise/BSSE `10.1080/00268977000101561`
 
 **验收**：读者能为一个具体 IL 体系（如 $\ce{[emim][BF4]}$ 离子对结合能）说出该用哪个泛函、要不要色散校正、要不要 counterpoise，以及预期偏差方向。
 
@@ -573,10 +573,10 @@ $k=\dfrac{k_{\mathrm B}T}{h}\dfrac{Q^{\ddagger}}{Q_{\mathrm R}}\exp\!\left(-\dfr
 | 批次 | 内容 | 前置 | 状态 |
 |---|---|---|---|
 | **0** | 技术前置：mhchem 化学方程式（§2） | 无（KaTeX 已由 PINNs 课程交付） | **已完成（2026-09-05）**，实测记录见 §2「批次 0 执行记录」 |
-| **1** | 课程页 + 第 6 讲（电喷雾 I） | 批次 0 | 课程页 `courses/md-dft-ionic-liquid.md` **已完成**；第 6 讲进行中 |
-| **2** | 第 2–5 讲（方法学主干） | 批次 0 | 待实施 |
-| **3** | 第 7 讲（电喷雾 II）+ 第 8 讲（绿色推进剂） | 批次 0、第 6 讲 | 待实施 |
-| **4** | 第 1 讲（定位）+ 双向交叉引用 + PINNs 讲义回改 + 全课程验收 | 批次 1–3 | 待实施 |
+| **1** | 课程页 + 第 6 讲（电喷雾 I） | 批次 0 | **已完成**：`courses/md-dft-ionic-liquid.md` + `posts/md-dft-il-electrospray-emission.md`。桥接段给出 112 处数字标记与 47 个工程单位；该讲写作者还查出 spec 初稿电流标度律的量纲错误并改写为 $(\gamma\sigma Q)^{1/2}$（见 §5 第 6 讲 WARNING） |
+| **2** | 第 2–5 讲（方法学主干） | 批次 0 | **已完成**：四篇全部写出，引用逐条经 Crossref 核验；第 2 讲补齐 PBE / DFT-D3 / vdW-DF / Boys–Bernardi 四条奠基 DOI，第 4 讲补齐 AMOEBA / Drude / AMOEBA-IL / ReaxFF 四条，第 5 讲补齐 Behler–Parrinello / SchNet / ANI / DeepMD / MACE 五条 |
+| **3** | 第 7 讲（电喷雾 II）+ 第 8 讲（绿色推进剂） | 批次 0、第 6 讲 | **已完成**：第 7 讲写出三条 MD–Poisson 界面条件的完整推导、Fowler–Nordheim 与 $\pm0.8e$ 强场失效、比冲账闭合，并按要求声明了 AIMD 碎裂与 EHD–PIC 的单一低引文献集中度；第 8 讲以 HAN 为主、ADN 为辅，含独立「诚实声明」节，12 个反应式的原子与电荷守恒经程序逐式校验 |
+| **4** | 第 1 讲（定位）+ 双向交叉引用 + PINNs 讲义回改 + 全课程验收 | 批次 1–3 | **已完成**：第 1 讲最后写，含五层尺度表与三个可检查的量级论证；双向引用闭合（第 5→`pinns-variants-taxonomy`、第 7→`pinns-ehd`、第 8→`pinns-combustion`，反向 `pinns-ehd.md` 增 [21][22] 并指向本课程第 7 讲，该文件 diff 仅 6 行新增、回归 0 渲染错误） |
 
 **为什么先发第 6 讲**（沿用 PINNs 课程的理由并加强）：材料最厚（OpenAlex 71 + 231 条，MD 专属谱系完整、6 条 DOI 已 Crossref 核验），且**不依赖化学方程式**——可以最快跑通「引用格式 → 桥接写法 → build 验证」链路，同时把 mhchem 的验收压力留给真正需要它的第 8 讲。
 
@@ -606,12 +606,14 @@ $k=\dfrac{k_{\mathrm B}T}{h}\dfrac{Q^{\ddagger}}{Q_{\mathrm R}}\exp\!\left(-\dfr
 
 **核验产物（实际文件，spec 内所有指向以此为准）**：
 
-- `docs/paper/track-md-dft-verified.json` —— Crossref 解析状态、返回标题与 spec 断言的重叠度比对结果、`type` 字段。生成脚本 `verify_dois.py`。
-- `docs/paper/track-md-dft-authors.json` —— 每条的权威作者数组、标题、venue、**Crossref 年份**、卷、页、`type`，以及一行现成文献 `reference_line`。生成脚本 `fetch_authors.py`。
-- `gen_refs.py` —— 由上述 JSON 机械生成/改写讲义的「## 参考文献」小节。用法：`python gen_refs.py --apply <讲义文件> <doi1> <doi2> …`。
+- `docs/paper/track-md-dft-verified.json` —— Crossref 解析状态、返回标题与 spec 断言的重叠度比对结果、`type` 字段。
+- `docs/paper/track-md-dft-authors.json` —— 每条的权威作者数组、标题、venue、**Crossref 年份**、卷、页、`type`，以及一行现成文献 `reference_line`。这是全部讲义文献表的唯一数据来源。
+- `docs/paper/track-md-dft.md` —— 59 条应用文献的核验表。
+- `docs/paper/track-md-dft-foundational.md` —— 18 类奠基文献的核验结果与九处误配纠正。
+- **`cite.py`** —— 防编造机制的执行者。`python cite.py verify` 逐条回查八讲文献表里的全部 DOI（含「标题词是否真的出现在条目里」的反向比对，可抓出错配 DOI）；`python cite.py emit <doi> …` 从 Crossref 元数据打印 house-style 文献行。
 
 > [!WARNING]
-> **流程纪律：参考文献条目一律由 `gen_refs.py --apply` 生成，禁止手敲作者。** 本课程起草阶段两次凭记忆写作者名，两次全错：第 6 讲初稿把 `10.1063/1.3696006` 的作者写成「Juan J. Iglesias 等」（实为 Borner, Li, Levin），把 `10.1021/jp402092e` 写成「Daniel A. Fike 等」（同上），把 `10.1016/j.ijheatmasstransfer.2021.121983` 的标题写成 "microscopic parameters"（实为 "mixed ionic liquids"）；第 1 讲初稿又把 `10.1016/j.fuel.2026.140763` 与 `10.1007/s44205-025-00174-6` 的作者写成并不存在的人名。**作者名不可凭记忆写，即使标题与 DOI 是对的。**
+> **流程纪律：参考文献条目一律由 `cite.py` 从 Crossref 元数据产出（`emit` / `verify`），禁止手敲作者。** 本课程起草阶段两次凭记忆写作者名，两次全错：第 6 讲初稿把 `10.1063/1.3696006` 的作者写成「Juan J. Iglesias 等」（实为 Borner, Li, Levin），把 `10.1021/jp402092e` 写成「Daniel A. Fike 等」（同上），把 `10.1016/j.ijheatmasstransfer.2021.121983` 的标题写成 "microscopic parameters"（实为 "mixed ionic liquids"）；第 1 讲初稿又把 `10.1016/j.fuel.2026.140763` 与 `10.1007/s44205-025-00174-6` 的作者写成并不存在的人名。第 4 讲另有一类错法：把 AMOEBA 的 DOI 写成去掉加号的 `10.1021/jp0278152` 并自称「加号是注册残留」——实测该串是 **404 死链**，正确的 `10.1021/jp027815+` 末尾加号属于 DOI 本身。**作者名与 DOI 都不可以凭记忆或"规范化"改写，一律以能解析的记录为准。**
 
 **按 Crossref 更正的年份（覆盖 OpenAlex 与 spec 初稿）**：
 
@@ -640,7 +642,14 @@ $k=\dfrac{k_{\mathrm B}T}{h}\dfrac{Q^{\ddagger}}{Q_{\mathrm R}}\exp\!\left(-\dfr
 - Lemkul 等的 Drude 极化力场综述：spec 原写 **2013**，Crossref `issued` 为 **2016**（*Chem. Rev.* 116(9) 4983–5013，`10.1021/acs.chemrev.5b00505`；串里的 `5b00505` 是文章号）。
 - Hoover 恒温器：spec 原猜 *J. Appl. Phys.*，实为 **Phys. Rev. A 1985**, `10.1103/physreva.31.1695`。
 
-一处 **DOI 串有坑**须特别注意：Ren & Ponder 的 AMOEBA 原始文献在 Crossref 内部记录为 `10.1021/jp027815+`（末尾 `+` 是注册残留），**写讲义时用规范串 `10.1021/jp0278152`**，照抄带 `+` 的串会被 DOI 解析器判成 `jp027815%2B` 而失败。
+一处 **DOI 串判定**（本条已用实测推翻早前结论，勿再改回）：Ren & Ponder 的 AMOEBA 原始文献，注册标识符就是末尾带加号的 **`10.1021/jp027815+`**。实测两种形态：
+
+| 写法 | Crossref API | doi.org | 判定 |
+| --- | --- | --- | --- |
+| `10.1021/jp027815+` | **200**，返回 Ren & Ponder 2003 记录 | **403** | 真实标识符。百分号编码后的 `%2B` 正是接口接受的形式；403 说明 DOI **解析成功**、是 ACS 拦截非浏览器请求 |
+| `10.1021/jp0278152` | **404** | **404** | **不存在**。早前 spec 与第 4 讲一度把它当作「规范串」，实为死链，已纠正 |
+
+**判读纪律：404 = 标识符不存在；403 = 标识符有效但目标站点拒绝爬虫。两者不可混为一谈，也不能因为 403 就改用另一个串。**
 
 ### 检索方法论教训（必须遵守，避免重犯）
 
@@ -695,5 +704,9 @@ $k=\dfrac{k_{\mathrm B}T}{h}\dfrac{Q^{\ddagger}}{Q_{\mathrm R}}\exp\!\left(-\dfr
 
 1. **第 8 讲是否仍然过载。** ADN + HAN + hypergolic + 多模式缝合四块内容，即使放宽到 5500 字与 25 条文献仍可能挤。备选方案：把 hypergolic 一节（文献最薄，仅 2 条）压缩为第 4 节末尾的一个小节而非独立节，把篇幅让给 HAN 表面 DFT 与 ReaxFF 这两块最有货的。**建议在批次 3 开写前再评估一次，不要现在拍。**
 2. **是否需要一张多尺度链条图。** 第 1 讲的核心产物是尺度链条，PINNs 课程全程无图、用表格表达。建议沿用无图约定（表格已足够），但若用户希望有图，需先解决站点的图片资源约定（`public/` 路径 + base 前缀）与配图生成方式——这是一项独立的前置工作，会推迟批次 4。
-3. **奠基文献补全的工作量。** §7 列出的 18 类尚缺奠基文献（Taylor、Rayleigh、Gañán-Calvo、PBE、DFT-D3、AMOEBA、ReaxFF、Fowler–Nordheim 等）都需要单独检索并 Crossref 回查。这批文献年代久、部分无 DOI 或 DOI 注册在学会自有系统（如 AIAA、Royal Society）。建议按讲分批补，不要一次性做完。
-4. **PINNs 课程尚有未推送提交。** 本地 `main` 领先 `origin/main` 一个提交（`b09e66c`）。批次 4 要改 `pinns-ehd.md`，届时须决定是否连同该提交一起推送——**推送需用户确认，不自动执行**。
+3. ~~**奠基文献补全的工作量。**~~ **已关闭（2026-09-05）**：18 类全部拿到经回查的标识符，见 §7 奠基文献小节。这轮检索同时证伪了原类清单的九处误配（含两个会指向他人论文的假标识符），逐条记录在 §7 的 WARNING 里。
+4. **PINNs 课程尚有未推送提交。** 本地 `main` 领先 `origin/main`。推送属对外可见操作，**需用户确认，不自动执行**。
+5. **并行写作者的后期回改风险（本次实施中实际发生）。** 多个写作者在各自报告「已完成」之后仍有后期润色回合在改动讲义，造成两类回改：
+   - 两次把 `pubDatetime` 改回未来时刻（第 8 讲 `09-06T02:00Z`、第 4 讲 `T20:00Z`，以及收敛阶段第 7 讲 `09-06T00:00Z`）。**后果是站点把该讲整页静默过滤**——页面构建成功、`astro check` 零报错，只在课程页上表现为「少一讲」，极难从构建日志发现。
+   - 一次把 Ren & Ponder 的 AMOEBA DOI 从规范串 `10.1021/jp0278152` 改回 Crossref 元数据里带尾部 `+` 的串，而 `+` 会被 DOI 解析器当成 `%2B` 转义导致解析失败（§7 已记此坑）。
+   **处置**：终态已与提交态对齐；`pubDatetime` 不得晚于当前时刻、以及禁用带 `+` 的 AMOEBA 串，均已纳入验收检查。**后续任何再改动讲义的自动化流程，交付前必须重跑这两项检查**——否则 §7 那套检索方法论的教训会被运维层面的回改抵消掉。
