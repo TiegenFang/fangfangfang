@@ -1,0 +1,103 @@
+---
+import { getImage } from "astro:assets";
+import gate from "@/assets/garden/gate-key.png";
+import cat from "@/assets/garden/cat-key.png";
+import trees from "@/assets/garden/trees-key.png";
+import still from "@/assets/garden/poster.png";
+import plaque from "@/assets/garden/plaque.svg?url";
+
+const [gateImage, catImage, treesImage, poster] = await Promise.all([
+  getImage({ src: gate, width: 1100, format: "webp", quality: 95 }),
+  getImage({ src: cat, width: 1200, format: "webp", quality: 95 }),
+  getImage({ src: trees, width: 1000, format: "webp", quality: 95 }),
+  getImage({ src: still, width: 1200, format: "webp", quality: 85 }),
+]);
+---
+
+<figure class="garden" aria-label="方寸小院" data-pagefind-ignore>
+  <div
+    class="garden-stage"
+    data-garden
+    data-gate={gateImage.src}
+    data-cat={catImage.src}
+    data-trees={treesImage.src}
+    data-plaque={plaque}
+    role="img"
+    aria-label="透过粉墙灰瓦的景窗，树木掩映着二校门，香香卧在前方石地上，与门楼一样高。移动指针可轻微改变视角。"
+  >
+    <img
+      class="garden-still"
+      src={poster.src}
+      alt=""
+      width={poster.attributes.width}
+      height={poster.attributes.height}
+      aria-hidden="true"
+    />
+    <canvas aria-hidden="true"></canvas>
+  </div>
+</figure>
+
+<script>
+  import { mountGarden } from "@/scripts/garden-scene";
+
+  let cleanup: (() => void) | undefined;
+  let activeStage: HTMLElement | undefined;
+  const mount = () => {
+    const stage = document.querySelector<HTMLElement>("[data-garden]");
+    if (stage === activeStage) return;
+    cleanup?.();
+    activeStage = stage ?? undefined;
+    if (stage) cleanup = mountGarden(stage);
+  };
+  document.addEventListener("astro:page-load", mount);
+  document.addEventListener("astro:before-swap", () => {
+    cleanup?.();
+    cleanup = undefined;
+    activeStage = undefined;
+  });
+  mount();
+</script>
+
+<style>
+  .garden {
+    margin: 0.25rem -0.5rem 0;
+  }
+  .garden-stage {
+    position: relative;
+    aspect-ratio: 1.95;
+    touch-action: pan-y;
+  }
+  canvas,
+  .garden-still {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .garden-still {
+    object-fit: contain;
+  }
+  canvas {
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+  .garden-stage[data-ready] canvas {
+    opacity: 1;
+  }
+  .garden-stage[data-ready] .garden-still {
+    visibility: hidden;
+  }
+  @media (max-width: 480px) {
+    .garden {
+      margin-inline: -0.6rem;
+    }
+    .garden-stage {
+      aspect-ratio: 1.8;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    canvas {
+      transition: none;
+    }
+  }
+</style>
