@@ -28,6 +28,7 @@ const { Content } = await render(album);
 <Layout
   title={`${title} | ${t.pages.galleryTitle} | ${config.site.title}`}
   description={description}
+  ogImage={album.data.cover.src}
 >
   <Header />
 

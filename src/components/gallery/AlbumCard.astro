@@ -35,13 +35,13 @@ const metaLabel = `${date.getFullYear()} · ${category}`;
             widths={[320, 640]}
             sizes="(min-width: 1100px) 340px, 45vw"
             loading="lazy"
-            class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[6deg] rounded-xl object-cover shadow-sm transition-transform duration-300 ease-out group-hover:rotate-[10deg]"
+            class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[6deg] rounded-xl object-cover shadow-sm transition-transform duration-300 ease-out group-hover:rotate-[10deg] motion-reduce:transition-none"
           />
         )
       }
       {
         !back && (
-          <div class="border-border bg-muted absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[6deg] rounded-xl border transition-transform duration-300 ease-out group-hover:rotate-[10deg]" />
+          <div class="border-border bg-muted absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[6deg] rounded-xl border transition-transform duration-300 ease-out group-hover:rotate-[10deg] motion-reduce:transition-none" />
         )
       }
 
@@ -53,13 +53,13 @@ const metaLabel = `${date.getFullYear()} · ${category}`;
             widths={[320, 640]}
             sizes="(min-width: 1100px) 340px, 45vw"
             loading="lazy"
-            class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[-3deg] rounded-xl object-cover shadow-sm transition-transform duration-300 ease-out group-hover:rotate-[-6deg]"
+            class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[-3deg] rounded-xl object-cover shadow-sm transition-transform duration-300 ease-out group-hover:rotate-[-6deg] motion-reduce:transition-none"
           />
         )
       }
       {
         !middle && (
-          <div class="border-border bg-muted absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[-3deg] rounded-xl border transition-transform duration-300 ease-out group-hover:rotate-[-6deg]" />
+          <div class="border-border bg-muted absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[-3deg] rounded-xl border transition-transform duration-300 ease-out group-hover:rotate-[-6deg] motion-reduce:transition-none" />
         )
       }
 
@@ -69,7 +69,7 @@ const metaLabel = `${date.getFullYear()} · ${category}`;
         widths={[480, 800, 1200]}
         sizes="(min-width: 1100px) 340px, 45vw"
         loading="lazy"
-        class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rounded-xl object-cover shadow-md transition-[translate,transform] duration-300 ease-out group-hover:-translate-y-1"
+        class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rounded-xl object-cover shadow-md transition-[translate,transform] duration-300 ease-out group-hover:-translate-y-1 motion-reduce:transition-none"
       />
     </div>
 

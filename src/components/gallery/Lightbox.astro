@@ -137,7 +137,18 @@ const captions = photos.map(photo => photo.caption ?? "");
       image.src = sources[current];
       image.alt = captions[current];
       caption.textContent = captions[current];
+      // 预加载相邻两张，翻页时无需等待
+      for (const offset of [1, -1]) {
+        const neighbor =
+          sources[(current + offset + sources.length) % sources.length];
+        if (neighbor && !preloaded.has(neighbor)) {
+          preloaded.add(neighbor);
+          new Image().src = neighbor;
+        }
+      }
     };
+
+    const preloaded = new Set<string>([sources[0]]);
 
     triggers.forEach(trigger => {
       trigger.addEventListener("click", () => {

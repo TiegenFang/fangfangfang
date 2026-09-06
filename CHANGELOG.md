@@ -15,6 +15,7 @@
 - **Gallery 影像系统。** 新增 `gallery` 集合（一个 markdown 一个相册，照片与 md 同目录，Astro 多档尺寸 + 懒加载）；相册卡片照片叠放效果（前 3 张照片 6°/−3° 叠放，hover 展开，300ms，支持 reduced-motion）；相册详情页 CSS columns 瀑布流与原生 `<dialog>` 灯箱（左右切换、ESC / 遮罩关闭、题注）；「影像」导航项仅在有已发布相册时出现；附 `starter` 草稿相册作为写相册的模板与说明。
 - 展示型页面引入 `wide-layout`（1100px）宽版式，`Main` 组件支持 `wide` 属性。
 - 站点定位升级为个人数字主页：`CONTEXT.md` 更新定位并新增「项目」「相册」「影像」词条；新增 ADR 0002（Projects 用独立内容集合，Gallery 同模式预留）；收录重构计划文档 `docs/plan/`。
+- 影像收尾：《方寸之间使用指南》补第三讲「发布一个相册」；相册详情页以封面照片作为 OG 分享图；灯箱开启相邻照片预加载；相册卡片动效适配 `prefers-reduced-motion`。
 
 ### 修正
 
