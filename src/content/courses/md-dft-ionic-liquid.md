@@ -2,6 +2,7 @@
 pubDatetime: 2026-09-05T01:00:00Z
 title: 分子动力学与第一性原理：离子液体工质的电喷雾与绿色推进
 description: DFT、MD、力场谱系与机器学习势函数的方法论骨架，以及它们在离子液体电喷雾微推进与 HAN/ADN 基绿色推进剂催化分解两个方向的具体应用与尺度桥接。
+shortTitle: MD 与 DFT
 draft: false
 ---
 

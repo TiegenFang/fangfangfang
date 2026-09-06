@@ -2,6 +2,7 @@
 pubDatetime: 2026-09-01T03:00:00Z
 title: 方寸之间使用指南
 description: 这个站点自身的使用说明：怎么写普通文章、怎么开一门课、怎么写讲义。学会了就可以删掉这门课。
+shortTitle: 使用指南
 draft: false
 ---
 

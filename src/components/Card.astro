@@ -6,14 +6,23 @@ import Datetime from "./Datetime.astro";
 
 type Props = {
   variant?: "h2" | "h3";
+  /** 可选的小徽标（如所属课程短名），显示在标题上方 */
+  badge?: string;
 } & CollectionEntry<"posts">;
 
-const { variant: Heading = "h2", id, data, filePath } = Astro.props;
+const { variant: Heading = "h2", id, data, filePath, badge } = Astro.props;
 
 const { title, description, ...props } = data;
 ---
 
 <li class="my-6">
+  {
+    badge && (
+      <span class="border-border bg-muted/40 text-muted-foreground mb-1 block w-fit rounded-md border px-2 py-0.5 text-xs">
+        {badge}
+      </span>
+    )
+  }
   <a
     href={getPostUrl(id, filePath, Astro.currentLocale)}
     class:list={[

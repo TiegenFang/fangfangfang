@@ -11,7 +11,8 @@ import GardenScene from "@/components/GardenScene.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
-import { useTranslations } from "@/i18n";
+import { postFilter } from "@/utils/postFilter";
+import { useTranslations, tplStr } from "@/i18n";
 import config from "@/config";
 
 const { socials, posts: postsConfig } = config;
@@ -23,6 +24,33 @@ const posts = await getCollection("posts");
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+
+const courses = (
+  await getCollection("courses", ({ data }) => !data.draft)
+).sort(
+  (a, b) =>
+    new Date(b.data.pubDatetime).getTime() -
+    new Date(a.data.pubDatetime).getTime()
+);
+
+const allPostsForLectures = await getCollection("posts", postFilter);
+const courseShortNames = new Map(
+  courses.map(course => [
+    course.id,
+    course.data.shortTitle ?? course.data.title,
+  ])
+);
+const courseLectureCount = new Map<string, number>();
+for (const post of allPostsForLectures) {
+  if (post.data.course) {
+    courseLectureCount.set(
+      post.data.course,
+      (courseLectureCount.get(post.data.course) ?? 0) + 1
+    );
+  }
+}
+const withCourseBadge = ({ data }: (typeof sortedPosts)[number]) =>
+  data.course ? courseShortNames.get(data.course) : undefined;
 const homePath = getRelativeLocaleUrl(locale, "");
 ---
 
@@ -34,8 +62,10 @@ const homePath = getRelativeLocaleUrl(locale, "");
     data-home-path={homePath}
     class="app-layout my-1"
   >
-    <section id="hero" class="border-border border-b pt-8 pb-6">
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
+    <section id="hero" class="border-border border-b pt-6 pb-4">
+      <h1
+        class="mt-3 mb-3 inline-block text-4xl font-bold sm:mt-5 sm:mb-4 sm:text-5xl"
+      >
         你好，我是 Tiegen Fang
       </h1>
       <a
@@ -53,38 +83,50 @@ const homePath = getRelativeLocaleUrl(locale, "");
         <span class="sr-only">RSS Feed</span>
       </a>
 
-      <p>
-        欢迎来到「方寸之间」——我的个人碎碎念站点。这里记录课程讲义、学习笔记和一些不成体系的想法。方寸之间，自有天地。
+      <p class="text-muted-foreground">
+        记录课程、科研与计算，以及实验室之外的碎碎念。
       </p>
-      <p class="mt-2">
-        想看成体系的内容，去看看
-        <LinkButton
-          class="hover:text-accent underline decoration-dashed underline-offset-4"
-          href={getRelativeLocaleUrl(locale, "courses")}
-        >
-          课程
-        </LinkButton>{" "}
-        栏目；随手写的都在
-        <LinkButton
-          class="hover:text-accent underline decoration-dashed underline-offset-4"
-          href={getRelativeLocaleUrl(locale, "posts")}
-        >
-          博客
-        </LinkButton>{" "}
-        里。
-      </p>
+      <p class="mt-2">欢迎来到「方寸之间」。方寸之间，自有天地。</p>
       {
         socials.length > 0 && (
-          <div class="mt-4 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">
-              {t.home.socialLinks}:
-            </div>
+          <div class="mt-3 flex max-sm:flex-col sm:items-center">
+            <div class="me-2 whitespace-nowrap">{t.home.socialLinks}:</div>
             <Socials />
           </div>
         )
       }
       <GardenScene />
     </section>
+
+    {
+      courses.length > 0 && (
+        <section id="courses" class="border-border border-b pt-10 pb-6">
+          <h2 class="text-2xl font-semibold tracking-wide">{t.nav.courses}</h2>
+          <ul>
+            {courses.map(course => (
+              <li class="my-6">
+                <a
+                  href={getRelativeLocaleUrl(locale, `courses/${course.id}`)}
+                  class:list={[
+                    "text-accent inline-block text-lg font-medium",
+                    "decoration-dashed underline-offset-4 hover:underline",
+                    "focus-visible:no-underline focus-visible:underline-offset-0",
+                  ]}
+                >
+                  <h3 class="inline-block">{course.data.title}</h3>
+                </a>
+                <span class="text-muted-foreground ms-2 text-sm">
+                  {tplStr(t.course.lecturesCount, {
+                    count: courseLectureCount.get(course.id) ?? 0,
+                  })}
+                </span>
+                <p>{course.data.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
     {
       featuredPosts.length > 0 && (
@@ -100,7 +142,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
           </h2>
           <ul>
             {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
+              <Card variant="h3" badge={withCourseBadge(data)} {...data} />
             ))}
           </ul>
         </section>
@@ -115,7 +157,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
           </h2>
           <ul>
             {recentPosts.slice(0, postsConfig.perIndex).map(data => (
-              <Card variant="h3" {...data} />
+              <Card variant="h3" badge={withCourseBadge(data)} {...data} />
             ))}
           </ul>
         </section>

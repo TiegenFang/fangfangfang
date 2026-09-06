@@ -2,6 +2,7 @@
 pubDatetime: 2026-09-04T09:00:00Z
 title: 物理信息神经网络：从数学骨架到燃烧与电水动力学
 description: PINNs 的定义、训练病态、变体谱系与能力边界，以及在燃烧与电水动力学两个方向的具体控制方程与损失函数设计。
+shortTitle: PINNs
 draft: false
 ---
 
