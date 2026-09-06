@@ -30,6 +30,11 @@
   @apply max-w-app mx-auto w-full px-4;
 }
 
+/* Projects / Gallery 等展示型页面的更宽内容区（restructure plan §19） */
+@utility wide-layout {
+  @apply mx-auto w-full max-w-[1100px] px-4;
+}
+
 @utility active-nav {
   @apply underline decoration-wavy decoration-2 underline-offset-8;
 }

@@ -1,0 +1,71 @@
+---
+import { useTranslations } from "@/i18n";
+
+type Props = {
+  categories: readonly string[];
+};
+
+const { categories } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+
+const buttonClass =
+  "focus-outline rounded-lg border px-3 py-1.5 text-sm transition-colors duration-150 aria-pressed:border-transparent aria-pressed:bg-accent aria-pressed:text-accent-foreground border-border hover:border-accent/60";
+---
+
+<div
+  id="project-filter"
+  class="flex flex-wrap gap-2"
+  role="group"
+  aria-label="Filter projects by category"
+>
+  <button
+    type="button"
+    data-filter="all"
+    aria-pressed="true"
+    class={buttonClass}
+  >
+    {t.project.filterAll}
+  </button>
+  {
+    categories.map(category => (
+      <button
+        type="button"
+        data-filter={category}
+        aria-pressed="false"
+        class={buttonClass}
+      >
+        {category}
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  function initProjectFilter() {
+    const bar = document.getElementById("project-filter");
+    const grid = document.getElementById("project-grid");
+    if (!bar || !grid || bar.dataset.filterBound) return;
+    bar.dataset.filterBound = "1";
+
+    const buttons = bar.querySelectorAll<HTMLButtonElement>(
+      "button[data-filter]"
+    );
+    const cards = grid.querySelectorAll<HTMLElement>("[data-category]");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const filter = button.dataset.filter;
+        buttons.forEach(b =>
+          b.setAttribute("aria-pressed", String(b === button))
+        );
+        cards.forEach(card => {
+          const show = filter === "all" || card.dataset.category === filter;
+          card.classList.toggle("hidden", !show);
+        });
+      });
+    });
+  }
+
+  initProjectFilter();
+  document.addEventListener("astro:page-load", initProjectFilter);
+</script>

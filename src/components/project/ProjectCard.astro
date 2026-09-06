@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Datetime from "@/components/Datetime.astro";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+type Props = CollectionEntry<"projects">;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const { id, data } = Astro.props;
+
+const statusLabels = {
+  Active: t.project.statusActive,
+  Completed: t.project.statusCompleted,
+  Paused: t.project.statusPaused,
+  Archived: t.project.statusArchived,
+} as const;
+---
+
+<article
+  data-category={data.category}
+  class="border-border hover:border-accent/60 flex flex-col rounded-2xl border p-5 transition-[border-color,box-shadow] duration-200 hover:shadow-md"
+>
+  <div class="flex items-center justify-between gap-2">
+    <span
+      class="text-muted-foreground font-mono text-xs tracking-widest uppercase"
+    >
+      {data.category}
+    </span>
+    <span
+      class="border-border text-muted-foreground rounded-md border px-2 py-0.5 text-xs"
+    >
+      {statusLabels[data.status]}
+    </span>
+  </div>
+
+  <h3 class="mt-3 text-lg font-medium">
+    <a
+      href={getRelativeLocaleUrl(locale, `projects/${id}`)}
+      class="hover:text-accent decoration-dashed underline-offset-4 hover:underline focus-visible:no-underline"
+    >
+      {data.title}
+    </a>
+  </h3>
+
+  <p class="text-muted-foreground mt-2 flex-1 text-sm leading-relaxed">
+    {data.description}
+  </p>
+
+  <div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
+    {
+      data.repo && (
+        <a
+          href={data.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-accent border-border rounded-md border px-2 py-1 transition-colors duration-150"
+        >
+          {t.project.repoLink} ↗
+        </a>
+      )
+    }
+    {
+      data.tags.map(tag => (
+        <span class="text-muted-foreground bg-muted/40 rounded-md px-2 py-1">
+          {tag}
+        </span>
+      ))
+    }
+  </div>
+
+  <div class="mt-3">
+    <Datetime class="text-xs" pubDatetime={data.pubDatetime} />
+  </div>
+</article>

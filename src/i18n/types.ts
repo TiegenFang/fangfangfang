@@ -4,6 +4,8 @@ export interface UIStrings {
     posts: string;
     courses: string;
     tags: string;
+    projects: string;
+    gallery: string;
     about: string;
     archives: string;
     search: string;
@@ -49,11 +51,30 @@ export interface UIStrings {
     coursesTitle: string;
     coursesDesc: string;
 
+    projectsTitle: string;
+    projectsDesc: string;
+
+    galleryTitle: string;
+    galleryDesc: string;
+
     archivesTitle: string;
     archivesDesc: string;
 
     searchTitle: string;
     searchDesc: string;
+  };
+  gallery: {
+    photosCount: string;
+    empty: string;
+  };
+  project: {
+    /** 分类与筛选按钮（All / Research / Software / Learning 中的 All） */
+    filterAll: string;
+    statusActive: string;
+    statusCompleted: string;
+    statusPaused: string;
+    statusArchived: string;
+    repoLink: string;
   };
   course: {
     lecturesTitle: string;
@@ -75,6 +96,9 @@ export interface UIStrings {
     noResults: string;
     goToPreviousPage: string;
     goToNextPage: string;
+    lightboxClose: string;
+    lightboxPrev: string;
+    lightboxNext: string;
   };
   notFound: {
     title: string;

@@ -6,6 +6,8 @@ export default {
     posts: "Posts",
     courses: "Courses",
     tags: "Tags",
+    projects: "Projects",
+    gallery: "Gallery",
     about: "About",
     archives: "Archives",
     search: "Search",
@@ -51,11 +53,29 @@ export default {
     coursesTitle: "Courses",
     coursesDesc: "Structured series of notes and tutorials.",
 
+    projectsTitle: "Projects",
+    projectsDesc: "Research, software and learning repos.",
+
+    galleryTitle: "Gallery",
+    galleryDesc: "Photos, places and fragments of time.",
+
     archivesTitle: "Archives",
     archivesDesc: "All the articles I've archived.",
 
     searchTitle: "Search",
     searchDesc: "Search any article ...",
+  },
+  gallery: {
+    photosCount: "{{count}} photos",
+    empty: "Albums are being curated. Stay tuned.",
+  },
+  project: {
+    filterAll: "All",
+    statusActive: "Active",
+    statusCompleted: "Completed",
+    statusPaused: "Paused",
+    statusArchived: "Archived",
+    repoLink: "View repo",
   },
   course: {
     lecturesTitle: "Lectures",
@@ -76,6 +96,9 @@ export default {
     noResults: "No results found",
     goToPreviousPage: "Go to previous page",
     goToNextPage: "Go to next page",
+    lightboxClose: "Close",
+    lightboxPrev: "Previous photo",
+    lightboxNext: "Next photo",
   },
   notFound: {
     title: "404 Not Found",

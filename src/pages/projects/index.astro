@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import { PROJECT_CATEGORIES } from "@/content.config";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import ProjectCard from "@/components/project/ProjectCard.astro";
+import ProjectFilter from "@/components/project/ProjectFilter.astro";
+import ProjectGrid from "@/components/project/ProjectGrid.astro";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const projects = (
+  await getCollection("projects", ({ data }) => !data.draft)
+).sort(
+  (a, b) =>
+    new Date(b.data.pubDatetime).getTime() -
+    new Date(a.data.pubDatetime).getTime()
+);
+---
+
+<Layout
+  title={`${t.pages.projectsTitle} | ${config.site.title}`}
+  description={t.pages.projectsDesc}
+>
+  <Header />
+
+  <Main wide pageTitle={t.pages.projectsTitle} pageDesc={t.pages.projectsDesc}>
+    <ProjectFilter categories={PROJECT_CATEGORIES} />
+    <ProjectGrid id="project-grid" class="mt-6">
+      {projects.map(project => <ProjectCard {...project} />)}
+    </ProjectGrid>
+  </Main>
+
+  <Footer />
+</Layout>

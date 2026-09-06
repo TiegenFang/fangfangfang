@@ -6,6 +6,8 @@ export default {
     posts: "博客",
     courses: "课程",
     tags: "标签",
+    projects: "项目",
+    gallery: "影像",
     about: "关于",
     archives: "归档",
     search: "搜索",
@@ -51,11 +53,29 @@ export default {
     coursesTitle: "课程",
     coursesDesc: "成体系的笔记与教程系列。",
 
+    projectsTitle: "项目",
+    projectsDesc: "科研、软件与学习仓库。",
+
+    galleryTitle: "影像",
+    galleryDesc: "照片、地点与时间的碎片。",
+
     archivesTitle: "归档",
     archivesDesc: "按年份归档的全部文章。",
 
     searchTitle: "搜索",
     searchDesc: "搜索任意文章……",
+  },
+  gallery: {
+    photosCount: "共 {{count}} 张",
+    empty: "相册还在整理中，敬请期待。",
+  },
+  project: {
+    filterAll: "全部",
+    statusActive: "进行中",
+    statusCompleted: "已完成",
+    statusPaused: "暂停",
+    statusArchived: "已归档",
+    repoLink: "查看仓库",
   },
   course: {
     lecturesTitle: "课程讲义",
@@ -76,6 +96,9 @@ export default {
     noResults: "没有找到结果",
     goToPreviousPage: "上一页",
     goToNextPage: "下一页",
+    lightboxClose: "关闭",
+    lightboxPrev: "上一张",
+    lightboxNext: "下一张",
   },
   notFound: {
     title: "404 Not Found",
