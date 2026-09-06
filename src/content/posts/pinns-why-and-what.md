@@ -12,6 +12,8 @@ description: PINNs 的形式化定义、与传统离散化和神经算子的定�
 
 这一讲只做一件事：把 PINNs 放回数值方法的坐标系里，说清它**是什么、不是什么、什么时候有增量价值**。原始定义见 Raissi、Perdikaris 与 Karniadakis 2019 年的论文 [1]，领域全景见 Karniadakis 等 2021 年的综述 [2]。
 
+## Table of contents
+
 ## 形式化定义
 
 给定一个偏微分方程问题：

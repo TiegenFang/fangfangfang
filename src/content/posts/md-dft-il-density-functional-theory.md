@@ -15,6 +15,8 @@ draft: false
 
 先立一个结论，第 3、4 节把它拆开证明：**对离子液体，色散校正和 counterpoise 校正不是精度优化，而是正误分界。**
 
+## Table of contents
+
 ## 1 Hohenberg–Kohn 与 Kohn–Sham 构造
 
 Hohenberg–Kohn 两条定理的内容是：基态密度 $\rho(\mathbf r)$（给定粒子数 $N_e$）唯一决定外势 $v_{\text{ext}}(\mathbf r)$（至多差一个常数），因而决定体系全部基态性质；并且存在普适泛函 $F[\rho]$，使总能量泛函在 $\int\rho\,\mathrm d\mathbf r = N_e$ 约束下取变分极小即得基态。**它保证存在，不给出形式**——$F[\rho]$ 里未知的那一块就是交换关联。
