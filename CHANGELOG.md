@@ -6,6 +6,30 @@
 
 ---
 
+## 2026-09-06 · 首页信息架构、Projects 与影像系统
+
+### 新增
+
+- **首页信息架构升级。** 新增课程入口区（课程名 + 讲次数 + 一句简介，置于景窗与精选之间）；讲义卡片增加所属课程徽标（`courses` 集合新增 `shortTitle` 字段：MD 与 DFT / PINNs / 使用指南）；Hero 增加定位副标题；简介、社交链接与景窗的留白收紧，删去与导航重复的入口段落。
+- **Projects 模块。** 新增 `projects` 内容集合（category / status / repo / featured 等字段，见 ADR 0002），`/projects` 列表页（Research / Software / Learning 本地分类筛选，1100px 宽版式）与项目详情页；首批 8 个真实项目条目（Research 3、Software 3、Learning 2，描述依据各仓库 README）；一级导航加入「项目」，i18n 中英文案补齐。
+- **Gallery 影像系统。** 新增 `gallery` 集合（一个 markdown 一个相册，照片与 md 同目录，Astro 多档尺寸 + 懒加载）；相册卡片照片叠放效果（前 3 张照片 6°/−3° 叠放，hover 展开，300ms，支持 reduced-motion）；相册详情页 CSS columns 瀑布流与原生 `<dialog>` 灯箱（左右切换、ESC / 遮罩关闭、题注）；「影像」导航项仅在有已发布相册时出现；附 `starter` 草稿相册作为写相册的模板与说明。
+- 展示型页面引入 `wide-layout`（1100px）宽版式，`Main` 组件支持 `wide` 属性。
+- 站点定位升级为个人数字主页：`CONTEXT.md` 更新定位并新增「项目」「相册」「影像」词条；新增 ADR 0002（Projects 用独立内容集合，Gallery 同模式预留）；收录重构计划文档 `docs/plan/`。
+
+### 修正
+
+- 一级导航移除「标签」，标签页保留（restructure plan §13）。
+- `projects` 与 `gallery` 详情页的 `getStaticPaths` 过滤 `draft: true`，草稿不再生成可访问页面。
+- astro check 暴露的类型与弃用问题：`HTMLAttributes` 改从 `astro/types` 引入、`z.string().url()` 弃用改 `z.url()`。
+
+### 验证
+
+- 浏览器实测：首页明暗两套主题与 390px 移动端布局；`/projects` 分类筛选（aria-pressed 与卡片显隐联动）；项目详情页版式；相册卡片叠放与 hover；灯箱开图、题注与控制按钮。
+- 构建产物核对：无已发布相册时导航不渲染「影像」；草稿相册不生成页面（`dist/gallery/` 仅剩 index.html）。
+- `npm run lint`、`npm run format:check`、`npm run build`（astro check 74 文件 0 error，Pagefind 索引 30 页）全部通过。
+
+---
+
 ## 2026-09-06 · 全站讲义目录（TOC）
 
 ### 新增
