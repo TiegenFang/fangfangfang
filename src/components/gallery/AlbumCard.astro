@@ -1,0 +1,87 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { useTranslations, tplStr } from "@/i18n";
+import config from "@/config";
+
+type Props = CollectionEntry<"gallery">;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const { id, data } = Astro.props;
+const { title, description, date, category, cover, photos } = data;
+
+/** 照片叠放（restructure plan §9）：cover 之下依次是第 2、3 张照片；不足时用素色纸层补位 */
+const middle = photos.length > 1 ? photos[1].src : null;
+const back = photos.length > 2 ? photos[2].src : null;
+
+const metaLabel = `${date.getFullYear()} · ${category}`;
+---
+
+<article class="group relative">
+  <a
+    href={getRelativeLocaleUrl(locale, `gallery/${id}`)}
+    class="focus-outline block"
+    aria-label={title}
+  >
+    <div class="relative aspect-[4/3] px-3 py-2">
+      {
+        back && (
+          <Image
+            src={back}
+            alt=""
+            widths={[320, 640]}
+            sizes="(min-width: 1100px) 340px, 45vw"
+            loading="lazy"
+            class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[6deg] rounded-xl object-cover shadow-sm transition-transform duration-300 ease-out group-hover:rotate-[10deg]"
+          />
+        )
+      }
+      {
+        !back && (
+          <div class="border-border bg-muted absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[6deg] rounded-xl border transition-transform duration-300 ease-out group-hover:rotate-[10deg]" />
+        )
+      }
+
+      {
+        middle && (
+          <Image
+            src={middle}
+            alt=""
+            widths={[320, 640]}
+            sizes="(min-width: 1100px) 340px, 45vw"
+            loading="lazy"
+            class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[-3deg] rounded-xl object-cover shadow-sm transition-transform duration-300 ease-out group-hover:rotate-[-6deg]"
+          />
+        )
+      }
+      {
+        !middle && (
+          <div class="border-border bg-muted absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rotate-[-3deg] rounded-xl border transition-transform duration-300 ease-out group-hover:rotate-[-6deg]" />
+        )
+      }
+
+      <Image
+        src={cover}
+        alt={description ?? title}
+        widths={[480, 800, 1200]}
+        sizes="(min-width: 1100px) 340px, 45vw"
+        loading="lazy"
+        class="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rounded-xl object-cover shadow-md transition-[translate,transform] duration-300 ease-out group-hover:-translate-y-1"
+      />
+    </div>
+
+    <div class="mt-4">
+      <h3
+        class="group-hover:text-accent font-medium transition-colors duration-150"
+      >
+        {title}
+      </h3>
+      <p class="text-muted-foreground mt-1 text-sm">
+        {metaLabel} · {tplStr(t.gallery.photosCount, { count: photos.length })}
+      </p>
+    </div>
+  </a>
+</article>

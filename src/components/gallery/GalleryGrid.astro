@@ -1,0 +1,42 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+type Photo = CollectionEntry<"gallery">["data"]["photos"][number];
+
+type Props = {
+  photos: Photo[];
+};
+
+const { photos } = Astro.props;
+---
+
+<div id="gallery-masonry" class="columns-1 gap-4 sm:columns-2 lg:columns-4">
+  {
+    photos.map((photo, index) => (
+      <figure class="mb-4 break-inside-avoid">
+        <button
+          type="button"
+          class="focus-outline block w-full cursor-zoom-in"
+          data-lightbox-trigger
+          data-index={index}
+          aria-label={photo.caption ?? `Photo ${index + 1}`}
+        >
+          <Image
+            src={photo.src}
+            alt={photo.caption ?? ""}
+            widths={[400, 640, 960, 1400]}
+            sizes="(min-width: 1100px) 22vw, (min-width: 640px) 45vw, 90vw"
+            loading="lazy"
+            class="w-full rounded-lg transition-opacity duration-200 hover:opacity-90"
+          />
+        </button>
+        {photo.caption && (
+          <figcaption class="text-muted-foreground mt-1.5 text-xs">
+            {photo.caption}
+          </figcaption>
+        )}
+      </figure>
+    ))
+  }
+</div>

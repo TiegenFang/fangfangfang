@@ -1,0 +1,75 @@
+---
+import { getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import GalleryGrid from "@/components/gallery/GalleryGrid.astro";
+import Lightbox from "@/components/gallery/Lightbox.astro";
+import { useTranslations, tplStr } from "@/i18n";
+import config from "@/config";
+
+export async function getStaticPaths() {
+  const albums = await getCollection("gallery", ({ data }) => !data.draft);
+  return albums.map(album => ({
+    params: { slug: album.id },
+    props: { album },
+  }));
+}
+
+const { album } = Astro.props;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const { title, description, date, category, photos } = album.data;
+const { Content } = await render(album);
+---
+
+<Layout
+  title={`${title} | ${t.pages.galleryTitle} | ${config.site.title}`}
+  description={description}
+>
+  <Header />
+
+  <main
+    id="main-content"
+    class="wide-layout pb-4"
+    data-backUrl={getRelativeLocaleUrl(locale, "gallery")}
+  >
+    <a
+      href={getRelativeLocaleUrl(locale, "gallery")}
+      class="text-muted-foreground hover:text-accent block w-fit pt-6 text-sm transition-colors"
+    >
+      ← {t.pages.galleryTitle}
+    </a>
+
+    <h1 class="text-accent mt-4 inline-block text-2xl font-bold sm:text-3xl">
+      {title}
+    </h1>
+
+    <div
+      class="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-3 text-sm"
+    >
+      <span>{`${date.getFullYear()} · ${category}`}</span>
+      <span aria-hidden="true">·</span>
+      <span>{tplStr(t.gallery.photosCount, { count: photos.length })}</span>
+    </div>
+
+    {description && <p class="max-w-app mt-2 italic">{description}</p>}
+
+    {
+      album.body?.trim() && (
+        <div class="app-prose max-w-app mt-6">
+          <Content />
+        </div>
+      )
+    }
+
+    <div class="mt-8">
+      <GalleryGrid {photos} />
+    </div>
+  </main>
+
+  <Lightbox {photos} />
+  <Footer />
+</Layout>
