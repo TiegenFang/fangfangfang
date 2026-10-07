@@ -1,0 +1,122 @@
+---
+import PixelCat from "./PixelCat.astro";
+type Props = { active?: boolean };
+const { active = false } = Astro.props;
+---
+
+<div class="corner-loader" data-corner-loader hidden={!active}>
+  <div class="loading-content">
+    <PixelCat width={72} height={72} class="loading-cat" />
+    <p role="status" aria-live="polite">正在进入方寸之间</p>
+    <div
+      class="pixel-progress"
+      data-corner-progress
+      role="progressbar"
+      aria-label="进入便利店的加载进度"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="18"
+      aria-valuetext="正在打开便利店"
+      style="--progress: 18%"
+    >
+      <span class="progress-fill"></span>
+    </div>
+    <div class="loading-recovery" data-corner-recovery hidden>
+      <p>暂时没能进入，请再试一次。</p>
+      <button type="button" data-corner-retry>重新开门</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .corner-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: #141232;
+    color: #f8eed8;
+    opacity: 1;
+    transition: opacity 180ms;
+  }
+  .corner-loader[hidden],
+  .loading-recovery[hidden] {
+    display: none;
+  }
+  .corner-loader.is-complete {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .loading-content {
+    width: min(17rem, calc(100vw - 3rem));
+    text-align: center;
+  }
+  :global(.loading-cat) {
+    display: block;
+    margin: 0 auto 1.75rem;
+    animation: cat-step 650ms steps(2, end) infinite;
+  }
+  .corner-loader[data-load-failed] :global(.loading-cat) {
+    animation: none;
+  }
+  .loading-content > p {
+    font-size: 0.95rem;
+    letter-spacing: 0.16em;
+    line-height: 1.8;
+  }
+  .pixel-progress {
+    height: 1.25rem;
+    margin-top: 1.25rem;
+    padding: 3px;
+    border: 3px solid #f8eed8;
+    outline: 3px solid #141232;
+    background: #272444;
+    box-shadow:
+      3px 0 #f8eed8,
+      -3px 0 #f8eed8,
+      0 3px #f8eed8,
+      0 -3px #f8eed8;
+  }
+  .progress-fill {
+    display: block;
+    height: 100%;
+    width: var(--progress);
+    background: repeating-linear-gradient(
+      90deg,
+      #91d9c7 0 10px,
+      transparent 10px 13px
+    );
+    transition: width 240ms steps(8, end);
+  }
+  .loading-recovery {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    line-height: 1.8;
+  }
+  .loading-recovery button {
+    margin-top: 0.65rem;
+    padding: 0.45rem 1rem;
+    border: 2px solid #91d9c7;
+    color: #91d9c7;
+    cursor: pointer;
+  }
+  .loading-recovery button:focus-visible {
+    outline: 2px solid #f8eed8;
+    outline-offset: 4px;
+  }
+  @keyframes cat-step {
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .corner-loader,
+    .progress-fill {
+      transition: none;
+    }
+    :global(.loading-cat) {
+      animation: none;
+    }
+  }
+</style>

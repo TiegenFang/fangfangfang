@@ -1,0 +1,45 @@
+---
+type Props = {
+  width?: number;
+  height?: number;
+  x?: number;
+  y?: number;
+  class?: string;
+};
+const { width = 32, height = 32, x, y, class: className } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 32 32"
+  width={width}
+  height={height}
+  x={x}
+  y={y}
+  class={className}
+  shape-rendering="crispEdges"
+  aria-hidden="true"
+>
+  <path
+    fill="#49384f"
+    d="M5 0h6v3h10V0h6v5h2v11h-2v3h-2v3h2v5h3v-6h2v9h-3v2H6v-2H3v-9h2v-3H3V5h2z"
+  ></path>
+  <path fill="#c1a99f" d="M6 2h4v6H6zm16 0h4v6h-4z"></path>
+  <path fill="#dc9d9e" d="M7 4h2v3H7zm16 0h2v3h-2z"></path>
+  <path
+    fill="#f8eed8"
+    d="M10 5h12v3h5v7h-2v3h-3v3H10v-3H5v-3H4V8h6zM9 21h15v8H7v-5h2z"></path>
+  <path fill="#b7a29e" d="M5 8h6v7H5zm16 0h6v7h-6z"></path>
+  <path fill="#5c748d" d="M7 11h3v3H7zm15 0h3v3h-3z"></path>
+  <path fill="#a7d9ef" d="M8 11h2v2H8zm14 0h2v2h-2z"></path>
+  <path fill="#ffffff" d="M7 11h1v1H7zm15 0h1v1h-1z"></path>
+  <path fill="#b97988" d="M14 15h4v2h-4z"></path>
+  <path fill="#735261" d="M15 17h2v2h-2z"></path>
+  <path fill="#e9d4bb" d="M5 16h5v1H5zm17 0h5v1h-5zM9 24h3v4H9z"></path>
+  <path fill="#d57883" d="M10 20h14v2H10z"></path>
+  <path fill="#edc56b" d="M16 21h3v3h-3z"></path>
+  <path fill="#fff8e6" d="M7 28h6v3H7zm12 0h6v3h-6z"></path>
+  <g class="pixel-cat-paw">
+    <path fill="#49384f" d="M23 22h5v6h-5z"></path>
+    <path fill="#fff8e6" d="M23 22h4v4h-4z"></path>
+  </g>
+</svg>

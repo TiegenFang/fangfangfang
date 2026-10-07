@@ -1,0 +1,224 @@
+---
+import { getAssetPath } from "@/utils/withBase";
+import PixelCat from "./PixelCat.astro";
+import CornerLoader from "./CornerLoader.astro";
+const cornerPath = getAssetPath("corner/");
+const glyphs: Record<string, string[]> = {
+  H: ["10001", "10001", "10001", "11111", "10001", "10001", "10001"],
+  O: ["01110", "10001", "10001", "10001", "10001", "10001", "01110"],
+  S: ["01111", "10000", "10000", "01110", "00001", "00001", "11110"],
+  I: ["11111", "00100", "00100", "00100", "00100", "00100", "11111"],
+  M: ["10001", "11011", "10101", "10101", "10001", "10001", "10001"],
+  A: ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
+  R: ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
+  T: ["11111", "00100", "00100", "00100", "00100", "00100", "00100"],
+};
+const signPixels: string[] = [];
+let signX = 108;
+for (const letter of "HOSHI MART") {
+  glyphs[letter]?.forEach((row, y) => {
+    [...row].forEach((pixel, x) => {
+      if (pixel === "1")
+        signPixels.push(`M${signX + x * 2} ${30 + y * 2}h2v2h-2z`);
+    });
+  });
+  signX += letter === " " ? 8 : 12;
+}
+---
+
+<div class="corner-entrance" data-corner-entrance data-pagefind-ignore>
+  <a
+    class="entrance-link"
+    href={cornerPath}
+    data-corner-link
+    data-astro-reload
+    aria-label="让香香开门，进入方寸之间的便利店"
+  >
+    <svg
+      class="pixel-store"
+      viewBox="0 0 320 176"
+      shape-rendering="crispEdges"
+      aria-hidden="true"
+    >
+      <path fill="#201d3f" d="M0 0h320v176H0z"></path>
+      <path fill="#30284d" d="M0 98h38V66h22v68H0zm268-54h20v35h32v60h-52z"
+      ></path>
+      <path fill="#554268" d="M0 19h320v2H0zm23 2h2v113h-2z"></path>
+      <path
+        fill="#c3b0d4"
+        d="M16 32h2v8h-2zm34 16h2v6h-2zm234-22h2v8h-2zm18 40h2v5h-2z"></path>
+      <path
+        fill="#76618c"
+        d="M8 58h2v10H8zm50-43h2v7h-2zm211 6h2v6h-2zm31 6h2v8h-2z"></path>
+      <path fill="#15162d" d="M58 43h204v103H58z"></path>
+      <path fill="#756779" d="M64 51h192v89H64z"></path>
+      <path fill="#e7dac4" d="M68 59h184v77H68z"></path>
+      <path fill="#b1a393" d="M68 130h184v6H68z"></path>
+      <path fill="#3d6970" d="M66 23h188v28H66z"></path>
+      <path fill="#82bcac" d="M70 27h180v18H70z"></path>
+      <path fill="#f8eed8" d="M77 31h3v3h3v3h-3v3h-3v-3h-3v-3h3z"></path>
+      <path fill="#263d4e" d={signPixels.join("")}></path>
+      <path fill="#e9d5b7" d="M60 51h200v8H60z"></path>
+      <path
+        fill="#69a69c"
+        d="M60 51h14v8H60zm28 0h14v8H88zm28 0h14v8h-14zm28 0h14v8h-14zm28 0h14v8h-14zm28 0h14v8h-14zm28 0h14v8h-14zm28 0h4v8h-4z"
+      ></path>
+      <path fill="#485362" d="M74 66h58v58H74zm122 0h46v58h-46z"></path>
+      <path fill="#b3b1a0" d="M78 70h50v50H78zm122 0h38v50h-38z"></path>
+      <path fill="#f4d8a5" d="M80 72h46v44H80zm122 0h34v44h-34z"></path>
+      <path
+        fill="#aa826a"
+        d="M80 86h46v3H80zm0 15h46v3H80zm0 15h46v3H80zm122-30h34v3h-34zm0 15h34v3h-34zm0 15h34v3h-34z"
+      ></path>
+      <path
+        fill="#89ada6"
+        d="M83 78h5v8h-5zm16 0h5v8h-5zm16 0h6v8h-6zm91 0h5v8h-5zm16 0h6v8h-6z"
+      ></path>
+      <path fill="#d18786" d="M91 80h5v6h-5zm17 0h5v6h-5zm106 0h5v6h-5z"></path>
+      <path
+        fill="#7d809c"
+        d="M84 95h9v6h-9zm14-1h9v7h-9zm15 1h9v6h-9zm93 0h9v6h-9zm15-1h10v7h-10z"
+      ></path>
+      <path
+        fill="#e7eee0"
+        d="M84 109h6v7h-6zm13 0h6v7h-6zm14 0h6v7h-6zm96 0h6v7h-6zm14 0h6v7h-6z"
+      ></path>
+      <path fill="#45505d" d="M138 63h54v73h-54z"></path>
+      <path fill="#f6d79b" d="M142 67h46v65h-46z"></path>
+      <path fill="#b5a189" d="M146 76h38v3h-38zm0 20h38v3h-38zm0 20h38v3h-38z"
+      ></path>
+      <g class="door-left">
+        <path fill="#566879" d="M142 67h23v65h-23z"></path>
+        <path fill="#758b97" d="M145 70h17v57h-17z"></path>
+        <path fill="#a9bab5" d="M147 73h2v25h-2zm4 34h2v16h-2z"></path>
+        <path fill="#e5d3a7" d="M159 102h2v12h-2z"></path>
+      </g>
+      <g class="door-right">
+        <path fill="#566879" d="M165 67h23v65h-23z"></path>
+        <path fill="#758b97" d="M168 70h17v57h-17z"></path>
+        <path fill="#a9bab5" d="M170 73h2v25h-2zm7 34h2v16h-2z"></path>
+        <path fill="#e5d3a7" d="M168 102h2v12h-2z"></path>
+      </g>
+      <path fill="#414155" d="M132 136h66v4h-66zm-4 4h74v5h-74z"></path>
+      <path fill="#c8bd9f" d="M135 138h60v2h-60z"></path>
+      <path fill="#4f6573" d="M270 101h22v39h-22z"></path>
+      <path fill="#a8cdd1" d="M273 104h16v20h-16z"></path>
+      <path fill="#b07d9c" d="M275 107h3v5h-3zm8 0h3v5h-3z"></path>
+      <path fill="#eee4c6" d="M275 114h3v5h-3zm8 0h3v5h-3z"></path>
+      <path fill="#273143" d="M275 129h12v4h-12z"></path>
+      <path fill="#7c748e" d="M23 79h3v65h-3z"></path>
+      <path fill="#dfcb9e" d="M17 78h16v5H17z"></path>
+      <path fill="#37354c" d="M0 145h320v31H0z"></path>
+      <path fill="#6b5d70" d="M0 145h320v3H0z"></path>
+      <path
+        fill="#676069"
+        d="M82 152h39v2H82zm27 6h21v2h-21zm43-4h37v2h-37zm7 8h24v2h-24zm93-10h35v2h-35z"
+      ></path>
+      <path
+        fill="#c9c0ae"
+        d="M8 166h40v4H8zm56 0h40v4H64zm170 0h40v4h-40zm56 0h30v4h-30z"></path>
+      <PixelCat x={116} y={110} class="portal-cat" />
+    </svg>
+    <span class="entrance-caption">
+      <span>香香替你开门</span>
+      <span class="entrance-action"
+        >点击进入 <span aria-hidden="true">→</span></span
+      >
+    </span>
+  </a>
+  <CornerLoader />
+</div>
+
+<script>
+  import { mountCornerEntrance } from "@/scripts/corner-entry";
+  let cleanup: (() => void) | undefined;
+  function mount() {
+    cleanup?.();
+    cleanup = mountCornerEntrance();
+  }
+  document.addEventListener("astro:page-load", mount);
+  document.addEventListener("astro:before-swap", () => cleanup?.());
+  mount();
+</script>
+
+<style>
+  .corner-entrance {
+    margin-top: 1.25rem;
+  }
+  .entrance-link {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    text-decoration: none;
+  }
+  .entrance-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  .pixel-store {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .entrance-caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    color: var(--foreground);
+    font-size: 0.8rem;
+    line-height: 1.8;
+  }
+  .entrance-action {
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .entrance-link:hover .entrance-action {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  .door-left,
+  .door-right {
+    transition: transform 360ms steps(6, end) 300ms;
+  }
+  .is-opening .door-left {
+    transform: translateX(-19px);
+  }
+  .is-opening .door-right {
+    transform: translateX(19px);
+  }
+  .is-opening :global(.portal-cat) {
+    animation: cat-opens 700ms steps(4, end) forwards;
+  }
+  .is-opening :global(.pixel-cat-paw) {
+    animation: paw-reaches 400ms steps(2, end) forwards;
+  }
+  @keyframes cat-opens {
+    30% {
+      transform: translate(6px, -2px);
+    }
+    65% {
+      transform: translate(10px, 0);
+    }
+    100% {
+      transform: translate(10px, -2px);
+    }
+  }
+  @keyframes paw-reaches {
+    100% {
+      transform: translate(3px, -4px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .door-left,
+    .door-right {
+      transition: none;
+    }
+    .is-opening :global(.portal-cat),
+    .is-opening :global(.pixel-cat-paw) {
+      animation: none;
+    }
+  }
+</style>
