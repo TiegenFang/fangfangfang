@@ -15,6 +15,7 @@ type Props = {
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  bodyClass?: string;
 };
 
 const { site } = config;
@@ -24,6 +25,7 @@ const {
   description = site.description,
   ogImage = resolveDefaultOgImagePath(config),
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  bodyClass,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
@@ -121,7 +123,10 @@ const rssHref = getRelativeLocaleUrl(
     <ClientRouter />
   </head>
   <body
-    class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
+    class:list={[
+      "bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col",
+      bodyClass,
+    ]}
   >
     <slot />
     <script>

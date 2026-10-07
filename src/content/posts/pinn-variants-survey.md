@@ -1,6 +1,7 @@
 ---
 pubDatetime: 2026-09-07T01:31:27Z
 title: PINN 变体谱系：一份可核验的深度调研
+featured: true
 draft: false
 tags:
   - PINNs

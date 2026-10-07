@@ -4,22 +4,22 @@ import * as THREE from "three";
 export function createCourtyard(plaque: THREE.Texture) {
   const group = new THREE.Group();
   const plaster = new THREE.MeshStandardMaterial({
-    color: "#f2efe6",
+    color: "#efdfd5",
     roughness: 1,
   });
   const stone = new THREE.MeshStandardMaterial({
-    color: "#b6b3a7",
+    color: "#bdb5a6",
     roughness: 1,
   });
   const tile = new THREE.MeshStandardMaterial({
-    color: "#555c58",
+    color: "#56615b",
     roughness: 0.96,
   });
   const grout = new THREE.MeshStandardMaterial({
-    color: "#c3c2b6",
+    color: "#c7c2b4",
     roughness: 1,
   });
-  const paving = ["#dad8cc", "#d4d2c6", "#dfdccf"].map(
+  const paving = ["#ddd8ca", "#d4cfc1", "#e0dbce"].map(
     color => new THREE.MeshStandardMaterial({ color, roughness: 1 })
   );
   const box = (
@@ -39,6 +39,8 @@ export function createCourtyard(plaque: THREE.Texture) {
     return mesh;
   };
   box(11.6, 0.25, 5.2, 0, -0.18, 0, stone);
+  box(10.6, 0.13, 0.75, 0, -0.32, 2.5, stone);
+  box(10.9, 0.13, 0.65, 0, -0.44, 2.85, stone);
   box(11.35, 0.07, 4.98, 0, -0.02, 0, grout);
   for (let row = 0; row < 5; row++) {
     for (let col = 0; col < 12; col++) {
@@ -147,6 +149,92 @@ export function createCourtyard(plaque: THREE.Texture) {
   inscription.position.set(0, 4.43, 2.607);
   group.add(inscription);
   box(11.9, 0.1, 0.54, 0, 0.08, 2.5, stone);
+
+  const pot = new THREE.MeshStandardMaterial({
+    color: "#b68b74",
+    roughness: 0.85,
+  });
+  const soil = new THREE.MeshStandardMaterial({ color: "#5d5445" });
+  const foliage = new THREE.MeshStandardMaterial({
+    color: "#6b8263",
+    roughness: 0.95,
+  });
+  const plant = new THREE.Group();
+  plant.position.set(-3.4, 0.06, 1.05);
+  const planter = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.3, 0.22, 0.42, 20),
+    pot
+  );
+  planter.position.y = 0.21;
+  planter.castShadow = true;
+  planter.receiveShadow = true;
+  plant.add(planter);
+  const earth = new THREE.Mesh(new THREE.CircleGeometry(0.265, 20), soil);
+  earth.rotation.x = -Math.PI / 2;
+  earth.position.y = 0.425;
+  plant.add(earth);
+  for (let branch = 0; branch < 5; branch++) {
+    const angle = (branch / 5) * Math.PI * 2;
+    const height = 0.4 + (branch % 3) * 0.1;
+    const stem = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.012, 0.018, height, 5),
+      foliage
+    );
+    stem.position.set(
+      Math.cos(angle) * 0.09,
+      0.42 + height / 2,
+      Math.sin(angle) * 0.09
+    );
+    plant.add(stem);
+    for (let leaf = 0; leaf < 3; leaf++) {
+      const sprig = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 6), foliage);
+      sprig.scale.set(0.115, 0.23, 0.045);
+      sprig.position.set(
+        Math.cos(angle) * (0.1 + leaf * 0.075),
+        0.52 + leaf * 0.14,
+        Math.sin(angle) * (0.1 + leaf * 0.075)
+      );
+      sprig.rotation.set(0.35, angle, branch % 2 ? 0.6 : -0.6);
+      sprig.castShadow = true;
+      plant.add(sprig);
+    }
+  }
+  group.add(plant);
+
+  const ceramic = new THREE.MeshStandardMaterial({
+    color: "#78978c",
+    roughness: 0.35,
+  });
+  const bowl = new THREE.Mesh(
+    new THREE.LatheGeometry(
+      [
+        [0, 0.025],
+        [0.18, 0.025],
+        [0.3, 0.08],
+        [0.34, 0.17],
+        [0.3, 0.18],
+        [0.26, 0.1],
+        [0, 0.08],
+      ].map(([x, y]) => new THREE.Vector2(x, y)),
+      24
+    ),
+    ceramic
+  );
+  bowl.position.set(3.75, 0.055, 1.05);
+  bowl.castShadow = true;
+  bowl.receiveShadow = true;
+  group.add(bowl);
+  const water = new THREE.Mesh(
+    new THREE.CircleGeometry(0.26, 24),
+    new THREE.MeshStandardMaterial({
+      color: "#b1c8c0",
+      roughness: 0.12,
+      metalness: 0.15,
+    })
+  );
+  water.rotation.x = -Math.PI / 2;
+  water.position.set(3.75, 0.17, 1.05);
+  group.add(water);
   return group;
 }
 

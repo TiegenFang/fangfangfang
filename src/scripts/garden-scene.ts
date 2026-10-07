@@ -60,8 +60,9 @@ export function mountGarden(stage: HTMLElement): () => void {
   const textures: THREE.Texture[] = [];
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 70);
-  const target = new THREE.Vector2();
-  const current = new THREE.Vector2();
+  let catMesh: THREE.Mesh | undefined;
+  let feedingStarted: number | undefined;
+  const catRestY = 1.11;
   let distance = 19;
   const stop = () => {
     cancelAnimationFrame(frame);
@@ -69,28 +70,32 @@ export function mountGarden(stage: HTMLElement): () => void {
   };
   const draw = () => {
     if (!renderer) return;
-    camera.position.set(
-      current.x * 1.05,
-      2.55 + distance * 0.105 + current.y * 0.55,
-      distance
-    );
-    camera.lookAt(current.x * 0.09, 2.3, 0);
+    camera.position.set(0, 2.55 + distance * 0.105, distance);
+    camera.lookAt(0, 2.25, 0);
     renderer.render(scene, camera);
   };
-  const render = () => {
+  const render = (now: number) => {
     frame = 0;
     if (disposed || !visible || document.hidden) return;
-    current.lerp(target, 0.07);
+    if (catMesh && feedingStarted !== undefined) {
+      const progress = Math.min((now - feedingStarted) / 750, 1);
+      const response = Math.sin(progress * Math.PI);
+      catMesh.position.y = catRestY + response * 0.05;
+      catMesh.rotation.z = -response * 0.018;
+      if (progress === 1) feedingStarted = undefined;
+    }
     draw();
-    if (current.distanceTo(target) > 0.0005)
-      frame = requestAnimationFrame(render);
+    if (feedingStarted !== undefined) frame = requestAnimationFrame(render);
   };
   const requestRender = () => {
     if (!frame && !disposed) frame = requestAnimationFrame(render);
   };
-  const home = () => {
-    target.set(0, 0);
-    if (motion.matches) current.set(0, 0);
+  const settle = () => {
+    feedingStarted = undefined;
+    if (catMesh) {
+      catMesh.position.y = catRestY;
+      catMesh.rotation.z = 0;
+    }
     requestRender();
   };
   const cleanup = () => {
@@ -126,6 +131,8 @@ export function mountGarden(stage: HTMLElement): () => void {
         alpha: true,
         antialias: true,
         powerPreference: "low-power",
+        // Retain the on-demand frame so the matching static poster can be exported.
+        preserveDrawingBuffer: true,
       });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -148,9 +155,9 @@ export function mountGarden(stage: HTMLElement): () => void {
         load(stage.dataset.plaque!),
       ]);
       if (disposed || !gate || !cat || !trees || !plaque) return;
-      scene.add(new THREE.HemisphereLight("#fffaf5", "#999b88", 1.8));
-      const sun = new THREE.DirectionalLight("#fffaf3", 1.7);
-      sun.position.set(-4, 9, 7);
+      scene.add(new THREE.HemisphereLight("#fff8ef", "#929a83", 1.65));
+      const sun = new THREE.DirectionalLight("#fff1df", 1.9);
+      sun.position.set(-5, 8, 6);
       sun.castShadow = true;
       Object.assign(sun.shadow.camera, {
         left: -8,
@@ -178,18 +185,19 @@ export function mountGarden(stage: HTMLElement): () => void {
         scene.add(mesh);
         return mesh;
       };
-      addLayer(trees, 4.5, 3.6, -3.5, 1.85, -1.88);
-      addLayer(trees, 4.9, 3.92, 3.6, 2.02, -1.75);
-      addLayer(trees, 2.5, 2, -0.7, 1.07, -1.65);
-      // The building (excluding flagpole) and cat both rise about 2.7 units.
-      addLayer(gate, 5.35, 4.02, -1.92, 1.67, -0.55);
-      addLayer(cat, 4.9, 3.27, 1.65, 1.48, 0.92);
-      const foreground = addLayer(trees, 2.4, 1.92, -4.46, 0.92, 1.53);
+      addLayer(trees, 4.7, 3.76, -3.6, 1.95, -1.94);
+      addLayer(trees, 4.5, 3.6, 3.7, 1.88, -1.8);
+      addLayer(trees, 2.25, 1.8, 0.15, 0.99, -1.75);
+      addLayer(gate, 5.35, 4.02, -1.7, 1.67, -1.03);
+      catMesh = addLayer(cat, 3.75, 2.5, 2.15, catRestY, 1.24);
+      const foreground = addLayer(trees, 2.05, 1.64, -4.65, 0.82, 1.54);
       foreground.rotation.y = 0.05;
       for (const [x, z, w, d, opacity] of [
-        [1.7, 0.95, 4.8, 1.8, 0.43],
-        [-1.9, -0.5, 5.0, 1.0, 0.26],
-        [-4.4, 1.5, 2.3, 1.0, 0.23],
+        [2.15, 1.24, 3.65, 1.45, 0.4],
+        [-1.7, -1.0, 5.0, 1.0, 0.24],
+        [-4.6, 1.5, 2.0, 1.0, 0.2],
+        [-3.4, 1.05, 0.85, 0.6, 0.2],
+        [3.75, 1.05, 0.8, 0.55, 0.18],
       ]) {
         const shadow = contactShadow(w, d, opacity);
         shadow.position.set(x, 0.052, z);
@@ -217,28 +225,15 @@ export function mountGarden(stage: HTMLElement): () => void {
       intersection.observe(stage);
       const signal = events.signal;
       stage.addEventListener(
-        "pointermove",
-        event => {
+        "garden:feed",
+        () => {
           if (motion.matches) return;
-          const rect = stage.getBoundingClientRect();
-          target.set(
-            ((event.clientX - rect.left) / rect.width) * 2 - 1,
-            1 - ((event.clientY - rect.top) / rect.height) * 2
-          );
+          feedingStarted = performance.now();
           requestRender();
         },
         { signal }
       );
-      stage.addEventListener("pointerleave", home, { signal });
-      stage.addEventListener("pointercancel", home, { signal });
-      stage.addEventListener(
-        "pointerup",
-        event => {
-          if (event.pointerType === "touch") home();
-        },
-        { signal }
-      );
-      motion.addEventListener("change", home, { signal });
+      motion.addEventListener("change", settle, { signal });
       document.addEventListener(
         "visibilitychange",
         () => {

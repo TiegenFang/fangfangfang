@@ -3,6 +3,7 @@ title: 扬州游
 description: 扬州的夜：城墙、古运河、灯与猫。
 date: 2024-10-07
 category: Travel
+featured: true
 cover: ./yangzhou-you/Z50_2621-1.jpg
 draft: false
 photos:

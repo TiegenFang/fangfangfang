@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
@@ -8,119 +8,86 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
 import GardenScene from "@/components/GardenScene.astro";
-import Card from "@/components/Card.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import { getSortedPosts } from "@/utils/getSortedPosts";
-import { postFilter } from "@/utils/postFilter";
-import { useTranslations, tplStr } from "@/i18n";
+import { getHomeContent } from "@/utils/getHomeContent";
 import config from "@/config";
 
-const { socials, posts: postsConfig } = config;
-
 const locale = Astro.currentLocale ?? config.site.lang;
-const t = useTranslations(locale);
-
-const posts = await getCollection("posts");
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
-
-const courses = (
-  await getCollection("courses", ({ data }) => !data.draft)
-).sort(
-  (a, b) =>
-    new Date(b.data.pubDatetime).getTime() -
-    new Date(a.data.pubDatetime).getTime()
-);
-
-const allPostsForLectures = await getCollection("posts", postFilter);
-const courseShortNames = new Map(
-  courses.map(course => [
-    course.id,
-    course.data.shortTitle ?? course.data.title,
-  ])
-);
-const courseLectureCount = new Map<string, number>();
-for (const post of allPostsForLectures) {
-  if (post.data.course) {
-    courseLectureCount.set(
-      post.data.course,
-      (courseLectureCount.get(post.data.course) ?? 0) + 1
-    );
-  }
-}
-const withCourseBadge = ({ data }: (typeof sortedPosts)[number]) =>
-  data.course ? courseShortNames.get(data.course) : undefined;
+const { featured, recent, recommendations, courseCount } =
+  await getHomeContent(locale);
 const homePath = getRelativeLocaleUrl(locale, "");
+const invitations = { post: "读一篇", project: "做一点", album: "看一眼" };
+const dateFormat = new Intl.DateTimeFormat("zh-CN", {
+  month: "numeric",
+  day: "numeric",
+  timeZone: config.site.timezone,
+});
 ---
 
-<Layout>
+<Layout bodyClass="home-page">
   <Header />
   <main
     id="main-content"
     data-layout="index"
     data-home-path={homePath}
-    class="app-layout my-1"
+    class="app-layout home-main"
   >
-    <section id="hero" class="border-border border-b pt-6 pb-4">
-      <h1
-        class="mt-3 mb-3 inline-block text-4xl font-bold sm:mt-5 sm:mb-4 sm:text-5xl"
-      >
-        你好，我是 Tiegen Fang
-      </h1>
-      <a
-        target="_blank"
-        href={`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`}
-        class="inline-block"
-        aria-label="RSS Feed"
-        title="RSS Feed"
-      >
-        <IconRss
-          width={20}
-          height={20}
-          class="stroke-accent scale-125 stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
-
-      <p class="text-muted-foreground">
-        记录课程、科研与计算，以及实验室之外的碎碎念。
+    <section id="hero" aria-labelledby="welcome-title">
+      <p class="welcome-note">方寸之间，自有天地。</p>
+      <h1 id="welcome-title">你好，我是 <span>Tiegen Fang</span></h1>
+      <p class="welcome-intro">
+        在这里记录科研与计算，也留一些实验室之外的日常。
       </p>
-      <p class="mt-2">欢迎来到「方寸之间」。方寸之间，自有天地。</p>
-      {
-        socials.length > 0 && (
-          <div class="mt-3 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 whitespace-nowrap">{t.home.socialLinks}:</div>
-            <Socials />
-          </div>
-        )
-      }
-      <GardenScene />
+      <p class="welcome-invitation">欢迎来坐坐。香香也在。</p>
+      <div class="intro-links">
+        {config.socials.length > 0 && <Socials />}
+        <a
+          class="rss-link"
+          href={getRelativeLocaleUrl(locale, "rss.xml").replace(/\/+$/, "")}
+          aria-label="RSS 订阅"
+        >
+          <IconRss width={16} height={16} />
+          <span>订阅</span>
+        </a>
+      </div>
+      <GardenScene recommendations={recommendations} />
     </section>
 
     {
-      courses.length > 0 && (
-        <section id="courses" class="border-border border-b pt-10 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">{t.nav.courses}</h2>
-          <ul>
-            {courses.map(course => (
-              <li class="my-6">
-                <a
-                  href={getRelativeLocaleUrl(locale, `courses/${course.id}`)}
-                  class:list={[
-                    "text-accent inline-block text-lg font-medium",
-                    "decoration-dashed underline-offset-4 hover:underline",
-                    "focus-visible:no-underline focus-visible:underline-offset-0",
-                  ]}
-                >
-                  <h3 class="inline-block">{course.data.title}</h3>
+      featured.length > 0 && (
+        <section
+          id="featured"
+          class="home-section"
+          aria-labelledby="start-title"
+        >
+          <div class="section-heading">
+            <h2 id="start-title">从这里开始</h2>
+            <p>一些文字，一些尝试，一些风景。</p>
+          </div>
+          <ul class="featured-grid">
+            {featured.map(entry => (
+              <li class="featured-entry">
+                <a class="featured-link" href={entry.href}>
+                  <span class="entry-invitation">
+                    {invitations[entry.kind]}
+                    <span aria-hidden="true"> / </span>
+                    {entry.category}
+                  </span>
+                  {entry.cover && (
+                    <Image
+                      src={entry.cover}
+                      width={480}
+                      height={288}
+                      format="webp"
+                      alt=""
+                      class="album-cover"
+                    />
+                  )}
+                  <h3>{entry.title}</h3>
+                  <p>{entry.description}</p>
+                  <span class="entry-arrow" aria-hidden="true">
+                    <IconArrowRight width={20} height={20} />
+                  </span>
                 </a>
-                <span class="text-muted-foreground ms-2 text-sm">
-                  {tplStr(t.course.lecturesCount, {
-                    count: courseLectureCount.get(course.id) ?? 0,
-                  })}
-                </span>
-                <p>{course.data.description}</p>
               </li>
             ))}
           </ul>
@@ -129,58 +96,291 @@ const homePath = getRelativeLocaleUrl(locale, "");
     }
 
     {
-      featuredPosts.length > 0 && (
+      recent.length > 0 && (
         <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-border border-b": recentPosts.length > 0 },
-          ]}
+          class="home-section recent-section"
+          aria-labelledby="recent-title"
         >
-          <h2 class="text-2xl font-semibold tracking-wide">
-            {t.home.featured}
-          </h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" badge={withCourseBadge(data)} {...data} />
+          <div class="section-heading">
+            <h2 id="recent-title">最近留下的东西</h2>
+          </div>
+          <ul class="recent-list">
+            {recent.map(entry => (
+              <li>
+                <time datetime={entry.date.toISOString()}>
+                  {dateFormat.format(entry.date)}
+                </time>
+                <div>
+                  <a href={entry.href}>{entry.title}</a>
+                  <p>{entry.description}</p>
+                </div>
+                <span class="recent-category">{entry.category}</span>
+              </li>
             ))}
           </ul>
+          <a class="quiet-link" href={getRelativeLocaleUrl(locale, "posts")}>
+            还有一些文字{" "}
+            <IconArrowRight width={16} height={16} aria-hidden="true" />
+          </a>
         </section>
       )
     }
 
     {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">
-            {t.home.recentPosts}
-          </h2>
-          <ul>
-            {recentPosts.slice(0, postsConfig.perIndex).map(data => (
-              <Card variant="h3" badge={withCourseBadge(data)} {...data} />
-            ))}
-          </ul>
-        </section>
+      courseCount > 0 && (
+        <aside class="course-note" aria-label="课程入口">
+          <p>想把一个问题慢慢学明白？成体系的笔记放在课程里。</p>
+          <a href={getRelativeLocaleUrl(locale, "courses")}>
+            去看看课程{" "}
+            <IconArrowRight width={16} height={16} aria-hidden="true" />
+          </a>
+        </aside>
       )
     }
-
-    <div class="my-8 text-center">
-      <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>
-        {t.home.allPosts}
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
   </main>
   <Footer />
 </Layout>
 
 <script>
   document.addEventListener("astro:page-load", () => {
-    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
-      ?.dataset;
-    const baseRoot = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-    if (indexLayout?.layout) {
-      sessionStorage.setItem("backUrl", indexLayout.homePath ?? baseRoot);
-    }
+    const homePath = document.querySelector<HTMLElement>(
+      '[data-layout="index"]'
+    )?.dataset.homePath;
+    if (homePath) sessionStorage.setItem("backUrl", homePath);
   });
 </script>
+
+<style is:global>
+  body.home-page {
+    --background: #f8f5ef;
+    --foreground: #343a35;
+    --accent: #48665d;
+    --accent-foreground: #fffdf7;
+    --muted: #e8e5db;
+    --muted-foreground: #606b61;
+    --border: #dadfd4;
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+  [data-theme="dark"] body.home-page {
+    --background: #202722;
+    --foreground: #e5e6dc;
+    --accent: #b4cebe;
+    --accent-foreground: #202722;
+    --muted: #343e36;
+    --muted-foreground: #b0baaf;
+    --border: #404c42;
+  }
+  .home-page header > div > a {
+    font-family: "Songti SC", "Noto Serif SC", "SimSun", serif;
+    letter-spacing: 0.08em;
+  }
+</style>
+
+<style>
+  .home-main {
+    padding-bottom: 3rem;
+  }
+  #hero {
+    padding-top: 2.5rem;
+  }
+  .welcome-note {
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+  }
+  h1 {
+    margin: 0.75rem 0 1rem;
+    font-size: clamp(1.75rem, 4vw, 2.4rem);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+  h1 span {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+  .welcome-intro,
+  .welcome-invitation {
+    line-height: 1.9;
+  }
+  .welcome-invitation {
+    margin-top: 0.25rem;
+    color: var(--muted-foreground);
+  }
+  .intro-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.75rem 0 0.25rem;
+    color: var(--accent);
+  }
+  .rss-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    font-size: 0.8rem;
+  }
+  .home-section {
+    margin-top: 3.25rem;
+  }
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.4rem;
+  }
+  h2 {
+    font-family: "Songti SC", "Noto Serif SC", "SimSun", serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .section-heading > p {
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+  }
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+  }
+  .featured-entry {
+    border-top: 1px solid var(--border);
+  }
+  .featured-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem 0 0.5rem;
+    text-decoration: none;
+  }
+  .entry-invitation {
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+  .album-cover {
+    width: 100%;
+    aspect-ratio: 5 / 3;
+    margin-bottom: 0.85rem;
+    border-radius: 0.2rem;
+    object-fit: cover;
+  }
+  .featured-link h3 {
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+  .featured-link p {
+    margin-top: 0.65rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    line-height: 1.9;
+  }
+  .entry-arrow {
+    margin-top: auto;
+    padding-top: 1rem;
+    color: var(--accent);
+  }
+  .featured-link:hover h3,
+  .recent-list a:hover,
+  .quiet-link:hover,
+  .course-note a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  .recent-list {
+    list-style: none;
+    padding: 0;
+  }
+  .recent-list li {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.95rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .recent-list time,
+  .recent-category {
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  .recent-list a {
+    font-weight: 500;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+  }
+  .recent-list p {
+    margin-top: 0.3rem;
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+    line-height: 1.85;
+  }
+  .quiet-link,
+  .course-note a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    color: var(--accent);
+    font-size: 0.875rem;
+  }
+  .quiet-link {
+    margin-top: 0.75rem;
+  }
+  .course-note {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .course-note p {
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+    line-height: 1.8;
+  }
+  @media (max-width: 580px) {
+    #hero {
+      padding-top: 1.75rem;
+    }
+    .home-section {
+      margin-top: 2.5rem;
+    }
+    .featured-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .featured-link {
+      position: relative;
+      padding-right: 1.5rem;
+    }
+    .entry-arrow {
+      position: absolute;
+      right: 0;
+      top: 0.65rem;
+    }
+    .album-cover {
+      max-width: 18rem;
+    }
+    .recent-list li {
+      grid-template-columns: 3.3rem minmax(0, 1fr);
+      gap: 0.65rem;
+    }
+    .recent-category {
+      display: none;
+    }
+  }
+</style>
