@@ -1,5 +1,7 @@
 # 「方寸之间」个人博客扩展与重构 Plan
 
+2026-10-07 场景更新：本文涉及 `GardenScene` 的计划已由 [雨夜街角方案](../specs/rainy-convenience-store.md) 取代，其他内容结构规划继续保留。
+
 > 项目仓库  
 > https://github.com/TiegenFang/fangfangfang
 >

@@ -15,3 +15,6 @@
 
 # Ignore MDX files
 *.mdx
+
+# Preserve the user-provided interactive diorama byte-for-byte.
+public/scenes/Hoshi Mart — a corner store diorama.html

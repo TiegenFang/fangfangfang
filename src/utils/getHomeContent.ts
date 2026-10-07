@@ -20,7 +20,7 @@ function introduction(key: string, description?: string) {
   return text.length > 100 ? `${text.slice(0, 100)}…` : text;
 }
 
-/** Homepage and garden discovery share the author's existing featured choices. */
+/** Independent posts, projects and albums introduce the site on the homepage. */
 export async function getHomeContent(locale: string) {
   const [posts, projects, albums, courses] = await Promise.all([
     getCollection("posts"),
@@ -70,16 +70,15 @@ export async function getHomeContent(locale: string) {
     })),
   ].sort((a, b) => b.date.getTime() - a.date.getTime());
 
-  const recommendations = entries.filter(entry => entry.featured);
+  const selections = entries.filter(entry => entry.featured);
   const featured = (["post", "project", "album"] as const)
-    .map(kind => recommendations.find(entry => entry.kind === kind))
+    .map(kind => selections.find(entry => entry.kind === kind))
     .filter((entry): entry is HomeEntry => Boolean(entry));
   const shown = new Set(featured.map(entry => entry.key));
 
   return {
     featured,
     recent: entries.filter(entry => !shown.has(entry.key)).slice(0, 3),
-    recommendations,
     courseCount: courses.length,
   };
 }

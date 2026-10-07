@@ -7,13 +7,12 @@ import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
-import GardenScene from "@/components/GardenScene.astro";
+import RainyCorner from "@/components/RainyCorner.astro";
 import { getHomeContent } from "@/utils/getHomeContent";
 import config from "@/config";
 
 const locale = Astro.currentLocale ?? config.site.lang;
-const { featured, recent, recommendations, courseCount } =
-  await getHomeContent(locale);
+const { featured, recent, courseCount } = await getHomeContent(locale);
 const homePath = getRelativeLocaleUrl(locale, "");
 const invitations = { post: "读一篇", project: "做一点", album: "看一眼" };
 const dateFormat = new Intl.DateTimeFormat("zh-CN", {
@@ -49,7 +48,7 @@ const dateFormat = new Intl.DateTimeFormat("zh-CN", {
           <span>订阅</span>
         </a>
       </div>
-      <GardenScene recommendations={recommendations} />
+      <RainyCorner />
     </section>
 
     {
@@ -150,32 +149,6 @@ const dateFormat = new Intl.DateTimeFormat("zh-CN", {
   });
 </script>
 
-<style is:global>
-  body.home-page {
-    --background: #f8f5ef;
-    --foreground: #343a35;
-    --accent: #48665d;
-    --accent-foreground: #fffdf7;
-    --muted: #e8e5db;
-    --muted-foreground: #606b61;
-    --border: #dadfd4;
-    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  }
-  [data-theme="dark"] body.home-page {
-    --background: #202722;
-    --foreground: #e5e6dc;
-    --accent: #b4cebe;
-    --accent-foreground: #202722;
-    --muted: #343e36;
-    --muted-foreground: #b0baaf;
-    --border: #404c42;
-  }
-  .home-page header > div > a {
-    font-family: "Songti SC", "Noto Serif SC", "SimSun", serif;
-    letter-spacing: 0.08em;
-  }
-</style>
-
 <style>
   .home-main {
     padding-bottom: 3rem;
@@ -193,10 +166,6 @@ const dateFormat = new Intl.DateTimeFormat("zh-CN", {
     font-size: clamp(1.75rem, 4vw, 2.4rem);
     font-weight: 500;
     line-height: 1.45;
-  }
-  h1 span {
-    font-family: Georgia, "Times New Roman", serif;
-    font-weight: 500;
   }
   .welcome-intro,
   .welcome-invitation {
@@ -232,7 +201,6 @@ const dateFormat = new Intl.DateTimeFormat("zh-CN", {
     margin-bottom: 1.4rem;
   }
   h2 {
-    font-family: "Songti SC", "Noto Serif SC", "SimSun", serif;
     font-size: 1.35rem;
     font-weight: 600;
     letter-spacing: 0.05em;
