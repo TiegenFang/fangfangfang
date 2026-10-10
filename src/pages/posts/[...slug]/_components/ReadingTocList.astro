@@ -1,0 +1,43 @@
+---
+import type { MarkdownHeading } from "astro";
+import type { HTMLAttributes } from "astro/types";
+
+type Props = {
+  sections: { heading: MarkdownHeading; children: MarkdownHeading[] }[];
+} & HTMLAttributes<"ul">;
+
+const { sections, class: className, ...attrs } = Astro.props;
+---
+
+<ul class:list={["rn-list", className]} {...attrs}>
+  {
+    sections.map(section => (
+      <li>
+        <a
+          class="rn-link"
+          href={`#${section.heading.slug}`}
+          data-rn-toc-link
+          data-rn-slug={section.heading.slug}
+        >
+          {section.heading.text}
+        </a>
+        {section.children.length > 0 && (
+          <ul class="rn-list">
+            {section.children.map(child => (
+              <li>
+                <a
+                  class="rn-link"
+                  href={`#${child.slug}`}
+                  data-rn-toc-link
+                  data-rn-slug={child.slug}
+                >
+                  {child.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </li>
+    ))
+  }
+</ul>

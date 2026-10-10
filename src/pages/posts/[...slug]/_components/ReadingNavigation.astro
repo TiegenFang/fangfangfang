@@ -9,16 +9,13 @@ import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import IconX from "@/assets/icons/IconX.svg";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
-
-interface TocHeading {
-  depth: number;
-  slug: string;
-  text: string;
-}
+import type { MarkdownHeading } from "astro";
+import ReadingTocList from "./ReadingTocList.astro";
+import ReadingCourseList from "./ReadingCourseList.astro";
 
 interface Props {
   /** 本文目录条目（页面已过滤内嵌目录标题，这里只取 h2/h3） */
-  headings?: TocHeading[];
+  headings?: MarkdownHeading[];
   /** 课程导航；独立文章为 undefined。url 可选：无已发布课程条目时仅展示标题文本 */
   course?: {
     title: string;
@@ -32,7 +29,8 @@ const t = useTranslations(Astro.currentLocale ?? config.site.lang);
 
 // 本文目录只索引 h2/h3；h3 按文档顺序归入所属 h2 分组，孤立 h3 自成分组
 const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
-const tocSections: { heading: TocHeading; children: TocHeading[] }[] = [];
+const tocSections: { heading: MarkdownHeading; children: MarkdownHeading[] }[] =
+  [];
 for (const heading of tocHeadings) {
   if (heading.depth === 2 || tocSections.length === 0) {
     tocSections.push({ heading, children: [] });
@@ -61,19 +59,7 @@ const hasToc = tocSections.length > 0;
               course.title
             )}
           </p>
-          <ul class="rn-list rn-aside-list">
-            {course.lectures.map(lecture => (
-              <li>
-                <a
-                  href={lecture.url}
-                  aria-current={lecture.current ? "page" : undefined}
-                  class="rn-link"
-                >
-                  {lecture.title}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <ReadingCourseList lectures={course.lectures} class="rn-aside-list" />
         </nav>
       </aside>
     )
@@ -88,36 +74,11 @@ const hasToc = tocSections.length > 0;
       <aside data-pagefind-ignore class="rn-aside rn-toc-aside">
         <nav aria-label={t.post.tableOfContents} class="rn-nav">
           <p class="rn-heading">{t.post.tableOfContents}</p>
-          <ul class="rn-list rn-aside-list" data-rn-toc-list>
-            {tocSections.map(section => (
-              <li>
-                <a
-                  class="rn-link"
-                  href={`#${section.heading.slug}`}
-                  data-rn-toc-link
-                  data-rn-slug={section.heading.slug}
-                >
-                  {section.heading.text}
-                </a>
-                {section.children.length > 0 && (
-                  <ul class="rn-list">
-                    {section.children.map(child => (
-                      <li>
-                        <a
-                          class="rn-link"
-                          href={`#${child.slug}`}
-                          data-rn-toc-link
-                          data-rn-slug={child.slug}
-                        >
-                          {child.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
+          <ReadingTocList
+            sections={tocSections}
+            class="rn-aside-list"
+            data-rn-toc-list
+          />
         </nav>
       </aside>
     )
@@ -180,19 +141,7 @@ const hasToc = tocSections.length > 0;
         </div>
         <div class="rn-dialog-body">
           <nav aria-label={t.course.navigation}>
-            <ul class="rn-list">
-              {course.lectures.map(lecture => (
-                <li>
-                  <a
-                    href={lecture.url}
-                    aria-current={lecture.current ? "page" : undefined}
-                    class="rn-link"
-                  >
-                    {lecture.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <ReadingCourseList lectures={course.lectures} />
           </nav>
         </div>
       </dialog>
@@ -222,36 +171,7 @@ const hasToc = tocSections.length > 0;
         </div>
         <div class="rn-dialog-body">
           <nav aria-label={t.post.tableOfContents}>
-            <ul class="rn-list">
-              {tocSections.map(section => (
-                <li>
-                  <a
-                    class="rn-link"
-                    href={`#${section.heading.slug}`}
-                    data-rn-toc-link
-                    data-rn-slug={section.heading.slug}
-                  >
-                    {section.heading.text}
-                  </a>
-                  {section.children.length > 0 && (
-                    <ul class="rn-list">
-                      {section.children.map(child => (
-                        <li>
-                          <a
-                            class="rn-link"
-                            href={`#${child.slug}`}
-                            data-rn-toc-link
-                            data-rn-slug={child.slug}
-                          >
-                            {child.text}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <ReadingTocList sections={tocSections} />
           </nav>
         </div>
       </dialog>
@@ -350,7 +270,7 @@ const hasToc = tocSections.length > 0;
     color: var(--accent);
   }
 
-  .rn-list {
+  .rn :global(.rn-list) {
     display: flex;
     flex-direction: column;
     gap: 0.0625rem;
@@ -362,13 +282,13 @@ const hasToc = tocSections.length > 0;
   }
 
   /* 目录的 h3 子列表：缩进 + 左侧引导线 */
-  .rn-list .rn-list {
+  .rn :global(.rn-list .rn-list) {
     margin-inline-start: 0.5rem;
     border-inline-start: 1px solid var(--border);
     padding-inline-start: 0.375rem;
   }
 
-  .rn-aside-list {
+  .rn :global(.rn-aside-list) {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
@@ -377,7 +297,7 @@ const hasToc = tocSections.length > 0;
     padding-inline-end: 0.25rem;
   }
 
-  .rn-link {
+  .rn :global(.rn-link) {
     display: block;
     padding: 0.3125rem 0.5rem;
     border-radius: 0.375rem;
@@ -385,12 +305,12 @@ const hasToc = tocSections.length > 0;
     overflow-wrap: anywhere;
   }
 
-  .rn-link:hover {
+  .rn :global(.rn-link:hover) {
     color: var(--accent);
   }
 
   /* 讲义当前讲 aria-current="page"，目录当前章节 aria-current="location" */
-  .rn-link[aria-current] {
+  .rn :global(.rn-link[aria-current]) {
     color: var(--accent);
     font-weight: 500;
     background: color-mix(in srgb, var(--accent) 10%, transparent);

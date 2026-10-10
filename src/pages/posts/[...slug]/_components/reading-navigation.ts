@@ -109,18 +109,13 @@ export function mountReadingNavigation(): (() => void) | undefined {
   }
 
   // 窗口连续展宽进入桌面断点时，收起已打开的抽屉
-  const courseColumn = window.matchMedia("(min-width: 1360px)");
-  const tocColumn = window.matchMedia("(min-width: 1120px)");
   const collapseForColumns = () => {
-    for (const { dialog, kind } of pairs) {
-      if (!dialog.open) continue;
-      if (kind === "course" ? courseColumn.matches : tocColumn.matches) {
+    for (const { dialog, trigger } of pairs) {
+      if (dialog.open && getComputedStyle(trigger).display === "none") {
         dialog.close();
       }
     }
   };
-  courseColumn.addEventListener("change", collapseForColumns, { signal });
-  tocColumn.addEventListener("change", collapseForColumns, { signal });
 
   // —— 本文目录滚动跟随 ——
   const tocLinks = Array.from(
@@ -170,7 +165,6 @@ export function mountReadingNavigation(): (() => void) | undefined {
 
     for (const link of tocLinks) {
       const active = slug !== null && link.dataset.rnSlug === slug;
-      link.classList.toggle("is-current", active);
       if (active) link.setAttribute("aria-current", "location");
       else link.removeAttribute("aria-current");
     }
@@ -191,11 +185,23 @@ export function mountReadingNavigation(): (() => void) | undefined {
     passive: true,
     signal,
   });
+  window.addEventListener(
+    "resize",
+    () => {
+      collapseForColumns();
+      requestApply();
+    },
+    { passive: true, signal }
+  );
+  const contentResize = new ResizeObserver(requestApply);
+  const main = root.querySelector("main");
+  if (main) contentResize.observe(main);
   // 初次挂载（含带深锚点进入）立即同步一次当前章节
   apply();
 
   return () => {
     events.abort();
+    contentResize.disconnect();
     if (raf) cancelAnimationFrame(raf);
     for (const { dialog } of pairs) {
       if (dialog.open) dialog.close();

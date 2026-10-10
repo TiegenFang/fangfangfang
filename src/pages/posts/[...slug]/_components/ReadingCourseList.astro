@@ -1,0 +1,25 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = {
+  lectures: { title: string; url: string; current: boolean }[];
+} & HTMLAttributes<"ul">;
+
+const { lectures, class: className, ...attrs } = Astro.props;
+---
+
+<ul class:list={["rn-list", className]} {...attrs}>
+  {
+    lectures.map(lecture => (
+      <li>
+        <a
+          href={lecture.url}
+          aria-current={lecture.current ? "page" : undefined}
+          class="rn-link"
+        >
+          {lecture.title}
+        </a>
+      </li>
+    ))
+  }
+</ul>
