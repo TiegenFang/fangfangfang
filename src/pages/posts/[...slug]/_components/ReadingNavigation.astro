@@ -1,0 +1,620 @@
+---
+/**
+ * 文章阅读页双导航（见 docs/specs/article-reading-navigation.md）：
+ * 宽屏「课程导航｜正文｜本文目录」三栏，窄屏收起为边缘触发按钮 + 原生 <dialog> 抽屉。
+ * 本组件只负责包装与导航本身；正文 <main>（保留 app-layout 宽度）由页面经默认 slot 传入。
+ */
+import IconHash from "@/assets/icons/IconHash.svg";
+import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
+import IconX from "@/assets/icons/IconX.svg";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+interface TocHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  /** 本文目录条目（页面已过滤内嵌目录标题，这里只取 h2/h3） */
+  headings?: TocHeading[];
+  /** 课程导航；独立文章为 undefined。url 可选：无已发布课程条目时仅展示标题文本 */
+  course?: {
+    title: string;
+    url?: string;
+    lectures: { title: string; url: string; current: boolean }[];
+  };
+}
+
+const { headings = [], course } = Astro.props;
+const t = useTranslations(Astro.currentLocale ?? config.site.lang);
+
+// 本文目录只索引 h2/h3；h3 按文档顺序归入所属 h2 分组，孤立 h3 自成分组
+const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+const tocSections: { heading: TocHeading; children: TocHeading[] }[] = [];
+for (const heading of tocHeadings) {
+  if (heading.depth === 2 || tocSections.length === 0) {
+    tocSections.push({ heading, children: [] });
+  } else {
+    tocSections[tocSections.length - 1].children.push(heading);
+  }
+}
+
+// 无讲次列表的课程视同无课程导航：不渲染侧栏卡片、抽屉与触发按钮
+const hasCourse = Boolean(course && course.lectures.length > 0);
+const hasToc = tocSections.length > 0;
+---
+
+<div
+  class:list={["rn", { "rn--course": hasCourse, "rn--toc": hasToc }]}
+  data-rn
+>
+  {
+    hasCourse && course && (
+      <aside data-pagefind-ignore class="rn-aside rn-course-aside">
+        <nav aria-label={t.course.navigation} class="rn-nav">
+          <p class="rn-heading">
+            {course.url ? (
+              <a href={course.url}>{course.title}</a>
+            ) : (
+              course.title
+            )}
+          </p>
+          <ul class="rn-list rn-aside-list">
+            {course.lectures.map(lecture => (
+              <li>
+                <a
+                  href={lecture.url}
+                  aria-current={lecture.current ? "page" : undefined}
+                  class="rn-link"
+                >
+                  {lecture.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    )
+  }
+
+  <div class="rn-main">
+    <slot />
+  </div>
+
+  {
+    hasToc && (
+      <aside data-pagefind-ignore class="rn-aside rn-toc-aside">
+        <nav aria-label={t.post.tableOfContents} class="rn-nav">
+          <p class="rn-heading">{t.post.tableOfContents}</p>
+          <ul class="rn-list rn-aside-list" data-rn-toc-list>
+            {tocSections.map(section => (
+              <li>
+                <a
+                  class="rn-link"
+                  href={`#${section.heading.slug}`}
+                  data-rn-toc-link
+                  data-rn-slug={section.heading.slug}
+                >
+                  {section.heading.text}
+                </a>
+                {section.children.length > 0 && (
+                  <ul class="rn-list">
+                    {section.children.map(child => (
+                      <li>
+                        <a
+                          class="rn-link"
+                          href={`#${child.slug}`}
+                          data-rn-toc-link
+                          data-rn-slug={child.slug}
+                        >
+                          {child.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    )
+  }
+
+  {
+    hasCourse && course && (
+      <button
+        type="button"
+        data-pagefind-ignore
+        class="rn-trigger rn-trigger--course"
+        data-rn-trigger="course"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="rn-drawer-course"
+        aria-label={t.course.navigation}
+      >
+        <IconMenuDeep class="rn-icon" />
+      </button>
+    )
+  }
+
+  {
+    hasToc && (
+      <button
+        type="button"
+        data-pagefind-ignore
+        class="rn-trigger rn-trigger--toc"
+        data-rn-trigger="toc"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="rn-drawer-toc"
+        aria-label={t.post.tableOfContents}
+      >
+        <IconHash class="rn-icon" />
+      </button>
+    )
+  }
+
+  {
+    hasCourse && course && (
+      <dialog
+        data-pagefind-ignore
+        id="rn-drawer-course"
+        class="rn-dialog rn-dialog--course"
+        aria-labelledby="rn-drawer-course-title"
+      >
+        <div class="rn-dialog-head">
+          <h2 class="rn-heading" id="rn-drawer-course-title">
+            {t.course.navigation}
+          </h2>
+          <button
+            type="button"
+            class="rn-close"
+            data-rn-close
+            aria-label={t.a11y.closeNavigation}
+          >
+            <IconX class="rn-icon" />
+          </button>
+        </div>
+        <div class="rn-dialog-body">
+          <nav aria-label={t.course.navigation}>
+            <ul class="rn-list">
+              {course.lectures.map(lecture => (
+                <li>
+                  <a
+                    href={lecture.url}
+                    aria-current={lecture.current ? "page" : undefined}
+                    class="rn-link"
+                  >
+                    {lecture.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </dialog>
+    )
+  }
+
+  {
+    hasToc && (
+      <dialog
+        data-pagefind-ignore
+        id="rn-drawer-toc"
+        class="rn-dialog rn-dialog--toc"
+        aria-labelledby="rn-drawer-toc-title"
+      >
+        <div class="rn-dialog-head">
+          <h2 class="rn-heading" id="rn-drawer-toc-title">
+            {t.post.tableOfContents}
+          </h2>
+          <button
+            type="button"
+            class="rn-close"
+            data-rn-close
+            aria-label={t.a11y.closeNavigation}
+          >
+            <IconX class="rn-icon" />
+          </button>
+        </div>
+        <div class="rn-dialog-body">
+          <nav aria-label={t.post.tableOfContents}>
+            <ul class="rn-list">
+              {tocSections.map(section => (
+                <li>
+                  <a
+                    class="rn-link"
+                    href={`#${section.heading.slug}`}
+                    data-rn-toc-link
+                    data-rn-slug={section.heading.slug}
+                  >
+                    {section.heading.text}
+                  </a>
+                  {section.children.length > 0 && (
+                    <ul class="rn-list">
+                      {section.children.map(child => (
+                        <li>
+                          <a
+                            class="rn-link"
+                            href={`#${child.slug}`}
+                            data-rn-toc-link
+                            data-rn-slug={child.slug}
+                          >
+                            {child.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </dialog>
+    )
+  }
+</div>
+
+<script>
+  // ClientRouter 换页：astro:page-load 重新挂载，astro:before-swap 释放监听并收起抽屉；
+  // cleanup 先行保证初始加载时 page-load 与模块执行双触发不产生重复处理器
+  import { mountReadingNavigation } from "./reading-navigation";
+
+  let cleanup: (() => void) | undefined;
+  function mount() {
+    cleanup?.();
+    cleanup = mountReadingNavigation();
+  }
+  document.addEventListener("astro:page-load", mount);
+  document.addEventListener("astro:before-swap", () => {
+    cleanup?.();
+    cleanup = undefined;
+  });
+  mount();
+</script>
+
+<style>
+  .rn {
+    /* 断点证明：
+       三栏最小总宽 24 + 240 + 24 + 768 + 24 + 264 = 1344 ≤ 1360（≥1360px 显示三栏）；
+       正文+目录最小总宽 24 + 768 + 24 + 264 = 1080 ≤ 1120（≥1120px 显示两栏）。
+       列均为定宽，justify-content: center 把剩余空间放到两侧，正文保持 768px 且页面居中。 */
+    --rn-main-w: 48rem; /* 768px，与 app-layout（max-w-3xl，含 px-4）一致 */
+    --rn-course-w: 15rem; /* 240px */
+    --rn-toc-w: 16.5rem; /* 264px */
+    --rn-gap: 1.5rem; /* 24px */
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, var(--rn-main-w));
+    justify-content: center;
+    column-gap: var(--rn-gap);
+    width: 100%;
+  }
+
+  .rn-main {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  /* —— 桌面侧栏 —— */
+
+  .rn-aside {
+    /* 各断点内按需开启（见下方媒体查询），不出现空占位卡片 */
+    display: none;
+    position: sticky;
+    top: 1rem;
+    grid-row: 1;
+    align-self: start;
+    flex-direction: column;
+    max-height: calc(100svh - 2rem);
+    padding: 0.875rem;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+  }
+
+  .rn-course-aside {
+    width: var(--rn-course-w);
+  }
+
+  .rn-toc-aside {
+    width: var(--rn-toc-w);
+  }
+
+  .rn-nav {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rn-heading {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted-foreground);
+  }
+
+  .rn-heading a {
+    color: inherit;
+  }
+
+  .rn-heading a:hover {
+    color: var(--accent);
+  }
+
+  .rn-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  /* 目录的 h3 子列表：缩进 + 左侧引导线 */
+  .rn-list .rn-list {
+    margin-inline-start: 0.5rem;
+    border-inline-start: 1px solid var(--border);
+    padding-inline-start: 0.375rem;
+  }
+
+  .rn-aside-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    /* 长列表滚到尽头时不把滚动传导给页面 */
+    overscroll-behavior: contain;
+    padding-inline-end: 0.25rem;
+  }
+
+  .rn-link {
+    display: block;
+    padding: 0.3125rem 0.5rem;
+    border-radius: 0.375rem;
+    color: var(--foreground);
+    overflow-wrap: anywhere;
+  }
+
+  .rn-link:hover {
+    color: var(--accent);
+  }
+
+  /* 讲义当前讲 aria-current="page"，目录当前章节 aria-current="location" */
+  .rn-link[aria-current] {
+    color: var(--accent);
+    font-weight: 500;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
+  /* ≥1120px：本文目录常驻（两栏） */
+  @media (min-width: 1120px) {
+    .rn--toc {
+      grid-template-columns: minmax(0, var(--rn-main-w)) var(--rn-toc-w);
+    }
+
+    .rn--toc .rn-toc-aside {
+      display: flex;
+      grid-column: 2;
+    }
+  }
+
+  /* ≥1360px：课程导航 + 正文 + 本文目录三栏 */
+  @media (min-width: 1360px) {
+    .rn--course {
+      grid-template-columns: var(--rn-course-w) minmax(0, var(--rn-main-w)) var(
+          --rn-toc-w
+        );
+    }
+
+    .rn--course .rn-course-aside {
+      display: flex;
+      grid-column: 1;
+    }
+
+    .rn--course .rn-main {
+      grid-column: 2;
+    }
+
+    .rn--course .rn-toc-aside {
+      grid-column: 3;
+    }
+
+    /* 有课程无目录：课程 + 正文两栏，正文仍在页面居中 */
+    .rn--course:not(.rn--toc) {
+      grid-template-columns: var(--rn-course-w) minmax(0, var(--rn-main-w));
+    }
+  }
+
+  /* —— 边缘触发按钮：仅对应导航存在且处于收起断点时显示 —— */
+
+  .rn-trigger {
+    position: fixed;
+    top: 42svh;
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.375rem;
+    color: var(--muted-foreground);
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 0.625rem;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+  }
+
+  .rn-trigger:hover {
+    color: var(--accent);
+  }
+
+  .rn-trigger--course {
+    inset-inline-start: 0;
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    border-inline-start: 0;
+  }
+
+  .rn-trigger--toc {
+    inset-inline-end: 0;
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+    border-inline-end: 0;
+  }
+
+  /* display:none 同步把按钮移出无障碍树与 Tab 序 */
+  @media (min-width: 1120px) {
+    .rn-trigger--toc {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1360px) {
+    .rn-trigger--course {
+      display: none;
+    }
+  }
+
+  /* —— 抽屉（原生 <dialog>：showModal 提供背景 inert 与焦点圈定，Esc 关闭，
+       焦点自动归还触发按钮；背景保持原位，不推挤正文） —— */
+
+  :global(html:has(.rn-dialog[open])) {
+    overflow: hidden;
+    padding-inline-end: var(--rn-scrollbar-width, 0px);
+  }
+
+  .rn-dialog {
+    display: none;
+    width: min(19rem, 86vw);
+    height: 100svh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    color: var(--foreground);
+    background: var(--background);
+    border: 0;
+    overflow: hidden;
+    transition:
+      opacity 0.2s ease,
+      translate 0.2s ease;
+  }
+
+  .rn-dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rn-dialog--course {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    border-inline-end: 1px solid var(--border);
+  }
+
+  .rn-dialog--toc {
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+    border-inline-start: 1px solid var(--border);
+  }
+
+  .rn-dialog::backdrop {
+    background: rgb(0 0 0 / 0.5);
+  }
+
+  @starting-style {
+    .rn-dialog--course[open] {
+      opacity: 0;
+      translate: -1rem 0;
+    }
+
+    .rn-dialog--toc[open] {
+      opacity: 0;
+      translate: 1rem 0;
+    }
+  }
+
+  .rn-dialog-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.625rem 0.5rem 0.625rem 0.875rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .rn-dialog-head .rn-heading {
+    font-size: 0.9375rem;
+  }
+
+  .rn-close {
+    display: inline-flex;
+    flex-shrink: 0;
+    padding: 0.375rem;
+    color: var(--muted-foreground);
+    border-radius: 0.375rem;
+  }
+
+  .rn-close:hover {
+    color: var(--accent);
+  }
+
+  .rn-dialog-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.875rem;
+  }
+
+  .rn-icon {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* —— slot 内正文的局部约束（不改全站 typography.css）：
+       宽表格与长 KaTeX display 在自身区域内横向滚动，保证内容可达且无整页横滚
+       （父级实测 390px 下表格把 scrollWidth 撑到 488px） —— */
+
+  .rn-main :global(article) {
+    min-width: 0;
+  }
+
+  .rn-main :global(article img) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .rn-main :global(article pre) {
+    overflow-x: auto;
+  }
+
+  .rn-main :global(article table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .rn-main :global(.katex-display) {
+    overflow-x: auto;
+  }
+
+  /* 章节跳转/锚点定位时与全站 :target 规则一致的顶部留白 */
+  .rn-main :global(article :is(h1, h2, h3, h4, h5, h6)) {
+    scroll-margin-block: 1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rn-dialog {
+      transition: none;
+    }
+  }
+</style>

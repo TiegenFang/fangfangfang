@@ -24,6 +24,7 @@ export default {
     editPage: "Edit page",
     previousPost: "Previous Post",
     nextPost: "Next Post",
+    tableOfContents: "On this page",
   },
   pagination: {
     prev: "Prev",
@@ -83,6 +84,9 @@ export default {
     lecturePrefix: "Lecture {{index}}",
     empty: "No lectures in this course yet.",
     backToCourses: "Back to courses",
+    navigation: "Course navigation",
+    previousLecture: "Previous Lecture",
+    nextLecture: "Next Lecture",
   },
   time: {
     dateFormat: "D MMM, YYYY",
@@ -91,6 +95,7 @@ export default {
     skipToContent: "Skip to content",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+    closeNavigation: "Close navigation",
     toggleTheme: "Toggle theme",
     searchPlaceholder: "Search posts...",
     noResults: "No results found",

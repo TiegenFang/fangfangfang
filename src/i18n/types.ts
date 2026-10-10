@@ -22,6 +22,7 @@ export interface UIStrings {
     editPage: string;
     previousPost: string;
     nextPost: string;
+    tableOfContents: string;
   };
   pagination: {
     prev: string;
@@ -82,6 +83,9 @@ export interface UIStrings {
     lecturePrefix: string;
     empty: string;
     backToCourses: string;
+    navigation: string;
+    previousLecture: string;
+    nextLecture: string;
   };
   time: {
     /** dayjs format tokens, e.g. "YYYY年M月D日" */
@@ -91,6 +95,7 @@ export interface UIStrings {
     skipToContent: string;
     openMenu: string;
     closeMenu: string;
+    closeNavigation: string;
     toggleTheme: string;
     searchPlaceholder: string;
     noResults: string;

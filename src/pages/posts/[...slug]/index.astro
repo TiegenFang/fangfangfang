@@ -1,5 +1,6 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import PostLayout from "@/layouts/PostLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
@@ -7,6 +8,8 @@ import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
 import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
 import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getCourseLectures } from "@/utils/getCourseLectures";
+import { getPostNavigation } from "@/utils/getPostNavigation";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
 import EditPost from "./_components/EditPost.astro";
@@ -14,51 +17,62 @@ import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
 import BackToTopButton from "./_components/BackToTopButton.astro";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
+import ReadingNavigation from "./_components/ReadingNavigation.astro";
 import config from "@/config";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   const sortedPosts = getSortedPosts(posts);
 
-  return sortedPosts.map((post, index) => ({
-    params: { slug: getPostSlug(post.id, post.filePath) },
-    props: {
-      post,
-      // sortedPosts is newest-first, so "older" (prev) is a higher index
-      // and "newer" (next) is a lower index.
-      prevPost:
-        index < sortedPosts.length - 1
-          ? {
-              id: sortedPosts[index + 1].id,
-              title: sortedPosts[index + 1].data.title,
-              filePath: sortedPosts[index + 1].filePath,
-            }
-          : null,
-      nextPost:
-        index > 0
-          ? {
-              id: sortedPosts[index - 1].id,
-              title: sortedPosts[index - 1].data.title,
-              filePath: sortedPosts[index - 1].filePath,
-            }
-          : null,
-    },
-  }));
-}
+  // Course pages are only generated for non-draft course entries, so only
+  // those may be linked; everything else falls back to the slug label.
+  const publishedCourses = await getCollection(
+    "courses",
+    ({ data }) => !data.draft
+  );
+  const courseById = new Map(
+    publishedCourses.map(course => [course.id, course])
+  );
 
-type AdjacentPost = {
-  id: string;
-  title: string;
-  filePath: string | undefined;
-} | null;
+  // getCourseLectures is filtered+sorted, so reuse it once per unique slug.
+  const courseSlugs = new Set(
+    sortedPosts
+      .map(post => post.data.course)
+      .filter((course): course is string => Boolean(course))
+  );
+  const lecturesBySlug = new Map(
+    [...courseSlugs].map(slug => [slug, getCourseLectures(posts, slug)])
+  );
+
+  return sortedPosts.map(post => {
+    const courseLectures = post.data.course
+      ? (lecturesBySlug.get(post.data.course) ?? [])
+      : [];
+    const courseEntry = post.data.course
+      ? (courseById.get(post.data.course) ?? null)
+      : null;
+    const { prevPost, nextPost } = getPostNavigation(
+      post,
+      sortedPosts,
+      courseLectures
+    );
+
+    return {
+      params: { slug: getPostSlug(post.id, post.filePath) },
+      props: { post, prevPost, nextPost, courseLectures, courseEntry },
+    };
+  });
+}
 
 type Props = {
   post: CollectionEntry<"posts">;
-  prevPost: AdjacentPost;
-  nextPost: AdjacentPost;
+  prevPost: CollectionEntry<"posts"> | null;
+  nextPost: CollectionEntry<"posts"> | null;
+  courseLectures: CollectionEntry<"posts">[];
+  courseEntry: CollectionEntry<"courses"> | null;
 };
 
-const { post, prevPost, nextPost } = Astro.props;
+const { post, prevPost, nextPost, courseLectures, courseEntry } = Astro.props;
 const locale = Astro.currentLocale ?? config.site.lang;
 
 const {
@@ -73,7 +87,31 @@ const {
   hideEditPost,
 } = post.data;
 
-const { Content } = await render(post);
+const { Content, headings: articleHeadings } = await render(post);
+
+// The article body already renders its own inline table of contents under a
+// "Table of contents" heading; exclude it so the sidebar navigation doesn't
+// list itself as a section.
+const headings = articleHeadings.filter(
+  heading => heading.slug !== "table-of-contents"
+);
+
+// Soft course reference: lecture navigation works even when the referenced
+// course entry is missing (or a draft), using the slug as the honest label
+// and omitting the course link when no published course page exists.
+const courseNavigation = post.data.course
+  ? {
+      title: courseEntry?.data.title ?? post.data.course,
+      url: courseEntry
+        ? getRelativeLocaleUrl(locale, `courses/${courseEntry.id}`)
+        : undefined,
+      lectures: courseLectures.map(lecture => ({
+        title: lecture.data.title,
+        url: getPostUrl(lecture.id, lecture.filePath, locale),
+        current: lecture.id === post.id,
+      })),
+    }
+  : undefined;
 
 let ogImageUrl: string | undefined;
 
@@ -108,59 +146,65 @@ const ogImage = ogImageUrl
 
   <BackButton />
 
-  <main
-    id="main-content"
-    class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
-    data-pagefind-body
-  >
-    <h1
-      style={{ viewTransitionName: toTransitionName(post.id) }}
-      class="text-accent inline-block text-2xl font-bold sm:text-3xl"
+  <ReadingNavigation {headings} course={courseNavigation}>
+    <main
+      id="main-content"
+      class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
+      data-pagefind-body
     >
-      {title}
-    </h1>
+      <h1
+        style={{ viewTransitionName: toTransitionName(post.id) }}
+        class="text-accent inline-block text-2xl font-bold sm:text-3xl"
+      >
+        {title}
+      </h1>
 
-    <div class="my-2 flex items-center gap-2">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span
-        aria-hidden="true"
+      <div class="my-2 flex items-center gap-2">
+        <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
+        <span
+          aria-hidden="true"
+          class:list={[
+            "text-muted-foreground max-sm:hidden",
+            { hidden: !config.features.editPost?.enabled || hideEditPost },
+          ]}
+        >
+          |
+        </span>
+        <EditPost {hideEditPost} {post} class="max-sm:hidden" />
+      </div>
+
+      <article
+        id="article"
         class:list={[
-          "text-muted-foreground max-sm:hidden",
-          { hidden: !config.features.editPost?.enabled || hideEditPost },
+          "mt-8 w-full",
+          "app-prose max-w-app",
+          "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
         ]}
       >
-        |
-      </span>
-      <EditPost {hideEditPost} {post} class="max-sm:hidden" />
-    </div>
+        <Content />
+      </article>
 
-    <article
-      id="article"
-      class:list={[
-        "mt-8 w-full",
-        "app-prose max-w-app",
-        "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
-      ]}
-    >
-      <Content />
-    </article>
+      <hr class="my-8 border-dashed" />
 
-    <hr class="my-8 border-dashed" />
+      <EditPost class="sm:hidden" {hideEditPost} {post} />
 
-    <EditPost class="sm:hidden" {hideEditPost} {post} />
+      <BackToTopButton />
 
-    <BackToTopButton />
+      <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
+        {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
+      </ul>
 
-    <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
-    </ul>
+      <ShareLinks />
 
-    <ShareLinks />
+      <hr class="my-8 border-dashed" />
 
-    <hr class="my-8 border-dashed" />
-
-    <AdjacentPostNav {prevPost} {nextPost} />
-  </main>
+      <AdjacentPostNav
+        {prevPost}
+        {nextPost}
+        isLecture={Boolean(post.data.course)}
+      />
+    </main>
+  </ReadingNavigation>
   <Footer />
 </PostLayout>
 
@@ -199,7 +243,7 @@ const ogImage = ogImageUrl
 
   function addHeadingLinks() {
     const headings = Array.from(
-      document.querySelectorAll("h2, h3, h4, h5, h6")
+      document.querySelectorAll("#article :is(h2, h3, h4, h5, h6)")
     );
     for (const heading of headings) {
       heading.classList.add("group");

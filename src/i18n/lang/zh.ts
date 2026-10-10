@@ -24,6 +24,7 @@ export default {
     editPage: "编辑此页",
     previousPost: "上一篇",
     nextPost: "下一篇",
+    tableOfContents: "本文目录",
   },
   pagination: {
     prev: "上一页",
@@ -83,6 +84,9 @@ export default {
     lecturePrefix: "第 {{index}} 讲",
     empty: "这门课还没有讲义。",
     backToCourses: "返回课程列表",
+    navigation: "课程导航",
+    previousLecture: "上一讲",
+    nextLecture: "下一讲",
   },
   time: {
     dateFormat: "YYYY年M月D日",
@@ -91,6 +95,7 @@ export default {
     skipToContent: "跳到正文",
     openMenu: "打开菜单",
     closeMenu: "关闭菜单",
+    closeNavigation: "关闭导航",
     toggleTheme: "切换主题",
     searchPlaceholder: "搜索文章……",
     noResults: "没有找到结果",
